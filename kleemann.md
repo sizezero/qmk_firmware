@@ -42,6 +42,20 @@ Instead of the paper clip you could also use the reset button
 (middlespace + backspace + ESC) but I haven't tried that yet. I think
 you have to do the sequence before plugging the keyboard in.
 
+# KBD75
+
+The build for the KBD75 is similar.
+
+    make kbdfans/kbd75/rev2:kleemann
+    make kbdfans/kbd75/rev2:kleemann:flash
+
+I was able to reset it with the original factory rest of
+SCRLK+Backspace. Hold both keys plug in, wait a bit, watch `ATmega32u4`
+show up in `dmesg`, and then release. This worked for me with the
+initial bootloader but after flashing, my other keystrokes (usually MO
+plus ESC) failed to work. I think if I ever have to flash it again, I'll
+have to remove the back plate and hit the reset button.
+
 # Building the Original Project
 
 Here are the orignal steps for cloning the project:
