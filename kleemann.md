@@ -50,11 +50,17 @@ The build for the KBD75 is similar.
     make kbdfans/kbd75/rev2:kleemann:flash
 
 I was able to reset it with the original factory rest of
-SCRLK+Backspace. Hold both keys plug in, wait a bit, watch `ATmega32u4`
-show up in `dmesg`, and then release. This worked for me with the
-initial bootloader but after flashing, my other keystrokes (usually MO
-plus ESC) failed to work. I think if I ever have to flash it again, I'll
-have to remove the back plate and hit the reset button.
+SCRLK+Backspace. Hold both keys plug in, wait a bit, watch
+`ATm32u4DFU` show up in `sudo dmesg -w`, and then release. This worked
+for me with the initial bootloader but after flashing, my new keymap
+(FN+ESC) it failed to work. It seems the new behavior with the
+reflashed QMK is to plug in the keyboard first, then hold the reset
+combo to get into flash mode. I threw in a bunch of reset codes into
+the keyboard layout including CapsLock+ESC, ScrollLock+ESC,
+LeftSpace+ESC, and MiddleSpace+ESC. If I every accidentally hit one of
+these keys it won't accidentally reset the keyboard, it will just mean
+I have to unplug and replug the keyboard to get it back. If it happens
+accidentally in practice I might want a more obscure reset option.
 
 # Building the Original Project
 
