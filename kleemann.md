@@ -18,6 +18,17 @@ myself. Place the `.json` file here:
 
     keyboards/dz60/keymaps/kleemann/keymap.json
 
+# Dependencies
+
+The more recent builds of the source tree seem to need and external qmk program.
+
+From the [full instructions](https://beta.docs.qmk.fm/tutorial/newbs_getting_started):
+
+    sudo apt install -y git python3-pip
+    python3 -m pip install --user qmk
+    cd ~/bin
+    ln -s ../.local/bin/qmk qmk
+
 # Building and Flashing
 
 Once:
