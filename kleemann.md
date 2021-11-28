@@ -84,3 +84,19 @@ Here are the orignal steps for cloning the project:
     git branch kleemann
     git checkout kleemann
     git push -u origin kleemann
+
+# Home Row Mods
+
+There is a whole thing about doing [home row mods.](https://precondition.github.io/home-row-mods) The gist is that you set your home keys to mod tap keys so that long press acts like the mod and tap acts like the home row letter.
+
+It turns out you can't just do this and have your keyboard work. There will be lots of mistyped keys as single presses are sometimes interpreted as mods and long presses are sometimes interpreted as characters. The solution is to set a bunch QMK compile flags that change how keypresses are interpreted.
+
+There are lots of options but right now I'm starting with just a few:
+
+    #define IGNORE_MOD_TAP_INTERRUPT
+    #define PERMISSIVE_HOLD
+    #define RETRO_TAPPING
+
+These settings can be in many different places but I've put them in `keymaps/<keymapname>/config.h`
+
+Right now I'm only testing this on my writing keyboard. If it works well I'll move them to my work keyboard as well.
