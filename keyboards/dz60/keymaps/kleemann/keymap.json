@@ -36,7 +36,7 @@
       "KC_LBRC",
       "KC_RBRC",
       "KC_BSLS",
-      "MO(1)",
+      "KC_TAB",
       "LALT_T(KC_A)",
       "LSFT_T(KC_S)",
       "LCTL_T(KC_D)",
@@ -67,8 +67,8 @@
       "KC_LGUI",
       "KC_LALT",
       "KC_SPC",
-      "MO(3)",
-      "MO(2)",
+      "LT(3,KC_BSPC)",
+      "LT(2,KC_ENT)",
       "KC_RALT",
       "KC_1",
       "KC_2",
@@ -76,7 +76,7 @@
       "KC_RCTL"
     ],
     [
-      "KC_GRV",
+      "RESET",
       "KC_F1",
       "KC_F2",
       "KC_F3",
