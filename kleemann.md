@@ -101,6 +101,9 @@ is configured to look for the Pro Micro which is very different than
 the Sea Micro. Changing the bootloader seemed to flash it and get it
 to be recognized
 
+There is both a kleemann layout and a test layout. The test layout is
+simpler and good at verifying PCB connection and switches.
+
 # Building the Original Project
 
 Here are the orignal steps for cloning the project:
