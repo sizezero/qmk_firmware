@@ -68,6 +68,39 @@ Then middle space + ESC. You should see `ATm32u4DFU` up in the dmesg output.
 
     make kbdfans/kbd75/rev2:kleemann:flash
 
+# Contra 40%
+
+The Contra uses a Pro Micro or Sea Micro as the controller. This
+requires the caterina bootloader but this appears to be all setup in
+the contra/ keyboard project. There are multiple ways to reset it:
+
+- Short the ground and reset. Reset appears to be the third pin the the left of the usb port. I'm not sure about ground.
+- Press the reset button on the sea micro. Some people say you need to press it twice.
+- Press the reset button the PCB after it is socketed.
+- Configure the layout with a reset code.
+
+Here's what the Sea Micro looks like. Reset button doesn't seem to change what it displays.
+
+    [33157.731843] usb 3-4: new full-speed USB device number 7 using xhci_hcd
+    [33157.882061] usb 3-4: New USB device found, idVendor=03eb, idProduct=2ff4, bcdDevice= 0.00
+    [33157.882070] usb 3-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+    [33157.882073] usb 3-4: Product: ATm32U4DFU
+    [33157.882075] usb 3-4: Manufacturer: ATMEL
+    [33157.882077] usb 3-4: SerialNumber: 1.0.0
+
+I made a very simple layout with two layers. The reset is the lower
+right key plus the upper left key. Lower right key can be tested by
+pressing various top row keys to produce fn keys.
+
+    make clean
+    make contra:kleemann
+    make contra:kleemann:flash
+
+The flash did not recognize the controller. It seems that the Contra
+is configured to look for the Pro Micro which is very different than
+the Sea Micro. Changing the bootloader seemed to flash it and get it
+to be recognized
+
 # Building the Original Project
 
 Here are the orignal steps for cloning the project:
