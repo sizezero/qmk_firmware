@@ -352,9 +352,9 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "KC_TRNS",
-      "KC_TRNS",
-      "KC_TRNS"
+      "ANY(DT_DOWN)",
+      "ANY(DT_UP)",
+      "ANY(DT_PRNT)"
     ],
     [
       "KC_NO",

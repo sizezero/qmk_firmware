@@ -37,5 +37,5 @@
 // the above looks like useless crap
 // these are the only things added to kleemann
 #define IGNORE_MOD_TAP_INTERRUPT
-#define PERMISSIVE_HOLD
-#define RETRO_TAPPING
+
+#define TAPPING_TERM 200
