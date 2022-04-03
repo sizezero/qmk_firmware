@@ -142,13 +142,11 @@ The tapping term is the maxximum time that a key should be held to register. Thi
 
 https://cdn.discordapp.com/attachments/663573863480950808/757162393209012304/modtap.pdf
 
-TAPPING_TERM is used to define the differences between presses, holds, and other actions. It basically represents the longest time period that a key would be normally pressed. PERMISSIVE_HOLD sets an infinite tapping term so it really shouldn't be used. It is much better to customize the tapping term based on your own personal typing style.
+TAPPING_TERM is used to define the differences between presses, holds, and other actions. It basically represents the longest time period that a key would be normally pressed and considerred a normal, pressed key. Longer than this and the press is considerred a hold. PERMISSIVE_HOLD sets an infinite tapping term so it really shouldn't be used. It is much better to customize the tapping term based on your own personal typing style.
 
 So what is the correct value for typing term? The default is 200MS. Most people choose a value between 150MS and 220MS. Higher values of tapping term will result in accidental alphas and lower values will result in accidental mods. It is easiest to troubeshoot by setting the default to the high side, and then lowering it until there are no problems. The default tapping term needs to be built into the config.h but the modifications occur by assigning DT_PRINT, DT_UP, AND DT_DOWN to extra keys. I'll be assigning them as the bottom leftmost keys on the space mod layer: DOWN, UP, PRINT. rules.mk also needs a DYNAMIC_TYPING_TERM_ENABLE = yes.
 
-To test this, first try long strings of lower case letters then practice on text containing capital letters. If you get accidental characters, lower the typing term and not the new value.
-
-
+To test this, first try long strings of lower case letters then practice on text containing capital letters. If you get accidental characters, lower the typing term and not the new value. After doing this, I started to run into problems at 160ms and 150ms. To give me some buffer, I'm setting my default to 175ms.
 
 ### 2
 
