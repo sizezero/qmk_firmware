@@ -104,6 +104,12 @@ to be recognized
 There is both a kleemann layout and a test layout. The test layout is
 simpler and good at verifying PCB connection and switches.
 
+# Corne Classic
+
+    make clean
+    make crkbd:kleemann
+    make crkbd:kleemann:flash
+
 # Building the Original Project
 
 Here are the orignal steps for cloning the project:
