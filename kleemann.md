@@ -107,8 +107,14 @@ simpler and good at verifying PCB connection and switches.
 # Corne Classic
 
     make clean
-    make crkbd:kleemann
-    make crkbd:kleemann:flash
+    make crkbd/rev1:kleemann
+    make crkbd/r2g:kleemann:flash
+
+All builds say 97% full which means I only have 500 bytes left. Huh, I
+swaped keyboard.c with keyboard.json and it dropped to 83%. Ok,
+included old default/keymaps.c minus the keymap and we're back to 96%
+Maybe this is due to the crazy oled and lighting stuff. First get it
+working, then play with all this crazy stuff.
 
 # Building the Original Project
 

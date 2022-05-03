@@ -8,3 +8,6 @@ LTO_ENABLE      = yes
 
 # Elite C v4 needs DFU Bootloader
 BOOTLOADER = atmel-dfu
+
+# load the old keymap.c
+SRC += default.c
