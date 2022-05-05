@@ -176,3 +176,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 #endif // OLED_ENABLE
+
+// kleemann
+
+#ifdef RGBLIGHT_ENABLE
+void keyboard_post_init_user(void) {
+  rgblight_enable_noeeprom(); // Enables RGB, without saving settings
+  //rgblight_sethsv_noeeprom(HSV_PURPLE);
+  //rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
+  rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_MOOD);
+}
+#endif
