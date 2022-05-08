@@ -1,6 +1,18 @@
 
 // !!! DO NOT ADD #pragma once !!! //
 
+// This animation is attempting to light each led in led index
+// order. Each call of the animation, lights a single led and resets
+// the rest to a value.
+
+// The actual effect is to light them in led index order, however,
+// instead of a single led being lit, THREE leds are lit at a
+// time. For the life of me, I can't figure out how the following code
+// could light three leds at once instead of just one.
+
+// a video of this animation is available here:
+// https://www.youtube.com/watch?v=ZrSnJVIb2kc
+
 // Step 1.
 // Declare custom effects using the RGB_MATRIX_EFFECT macro
 // (note the lack of semicolon after the macro!)
@@ -27,13 +39,14 @@ static bool my_cool_effect(effect_params_t* params) {
     // only light the primary led
     if (i == pi) {
       hsv.v = 100;
+      RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
+      rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
     } else {
-      hsv.v = 0;
+      rgb_matrix_set_color(i, 0, 0, 0);
     }
 
-    RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-    rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-  }
+   }
+  
   return rgb_matrix_check_finished_leds(led_max);
 }
 
