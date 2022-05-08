@@ -2,8 +2,8 @@
 // !!! DO NOT ADD #pragma once !!! //
 
 // This animation is attempting to light each led in led index
-// order. Each call of the animation, lights a single led and resets
-// the rest to a value.
+// order. Each call of the animation lights a single led and turns all
+// the others off by resetting them to black.
 
 // The actual effect is to light them in led index order, however,
 // instead of a single led being lit, THREE leds are lit at a
@@ -13,9 +13,9 @@
 // a video of this animation is available here:
 // https://www.youtube.com/watch?v=ZrSnJVIb2kc
 
-// Note: I have test a number of the stock animations and they appear
-// to work fine, so the problem is likely not
-// wiring/soldering/soldering or hardware related.
+// Note: I have tested this hardwar with a number of the stock
+// animations and they appear to work fine, so the problem is likely
+// not wiring/soldering/soldering or hardware related.
 
 // Step 1.
 // Declare custom effects using the RGB_MATRIX_EFFECT macro
