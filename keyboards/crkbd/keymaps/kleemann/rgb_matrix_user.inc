@@ -13,6 +13,10 @@
 // a video of this animation is available here:
 // https://www.youtube.com/watch?v=ZrSnJVIb2kc
 
+// Note: I have test a number of the stock animations and they appear
+// to work fine, so the problem is likely not
+// wiring/soldering/soldering or hardware related.
+
 // Step 1.
 // Declare custom effects using the RGB_MATRIX_EFFECT macro
 // (note the lack of semicolon after the macro!)
