@@ -13,7 +13,7 @@
 // a video of this animation is available here:
 // https://www.youtube.com/watch?v=ZrSnJVIb2kc
 
-// Note: I have tested this hardwar with a number of the stock
+// Note: I have tested this hardware with a number of the stock
 // animations and they appear to work fine, so the problem is likely
 // not wiring/soldering/soldering or hardware related.
 
@@ -35,14 +35,12 @@ static bool my_cool_effect(effect_params_t* params) {
   // determine the primary led index
   uint8_t pi = (time % (led_max - led_min)) + led_min;
   
-  HSV hsv = { 0xc0, 0xc0, 0xc0 };
- 
   for (uint8_t i = led_min; i < led_max; i++) {
     RGB_MATRIX_TEST_LED_FLAGS();
 
     // only light the primary led
     if (i == pi) {
-      hsv.v = 100;
+      HSV hsv = {0xc0, 0xc0, 100};
       RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
       rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
     } else {
