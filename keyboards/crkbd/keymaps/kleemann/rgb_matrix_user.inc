@@ -17,47 +17,160 @@
 // animations and they appear to work fine, so the problem is likely
 // not wiring/soldering/soldering or hardware related.
 
+// to run the console you need to:
+// in rules.mk:
+//   CONSOLE_ENABLE = yes
+//   OLED_ENABLE = no # due to mem
+//   LTO_ENABLE = no  # due to mem
+// default.c:
+//   debug_enable = true
+//   debug_matrix = true
+// from console:
+//   $ qmk console
+
+//uprintf("led_min:%d led_max:%d time:%d pi:%d total:%d\n", led_min,
+// led_max, time, pi, DRIVER_LED_TOTAL); The above debug statement
+// shows that the corne has a DRIVER_LED_TOTAL of 54. This function
+// is getting called three times with led_min/max of (0,11) (11,22)
+// (22,27). Only have half the keyboard is plugged in so I would
+// expect it to go all the way up to 54 if the other half was
+// plugged in. It seems led_min, led_max is just what leds are
+// expected to change for this call and are not representative of
+// the total number of leds. I should instead use
+// (0,DRIVER_LED_TOTAL) for normalization.
+
+// I think on the corne, init "if (params->init)" is getting called
+// about three times. It is probably called once with each of the led
+// ranges.
+
+// TODO: make a function that accepts a chain of keys/colors
+
 // Step 1.
 // Declare custom effects using the RGB_MATRIX_EFFECT macro
 // (note the lack of semicolon after the macro!)
 RGB_MATRIX_EFFECT(my_cool_effect)
+RGB_MATRIX_EFFECT(my_cool_effect2)
 
 // Step 2.
 // Define effects inside the `RGB_MATRIX_CUSTOM_EFFECT_IMPLS` ifdef block
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-// e.g: A simple effect, self-contained within a single method
+typedef struct PACKED {
+  HSV hsv;
+  uint8_t led_id;
+} path_node_t;
+
+static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uint8_t led_max) {
+
+  // magic time taken from BREATHING animation
+  uint16_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 100);
+
+  // indexes into ns
+  uint8_t pi0 = time % count;
+  uint8_t pi1 = (pi0-1 +count) % count;
+  uint8_t pi2 = (pi1-1 +count) % count;
+  uint8_t pi3 = (pi2-1 +count) % count;
+
+  HSV hsv;
+
+  for (uint8_t i = led_min; i < led_max; i++) {
+
+    if (ns[pi0].led_id == i) {
+      hsv.h = ns[pi0].hsv.h;
+      hsv.s = ns[pi0].hsv.s;
+      hsv.v = 150;
+    } else if (ns[pi1].led_id == i) {
+      hsv.h = ns[pi1].hsv.h;
+      hsv.s = ns[pi1].hsv.s;
+      hsv.v = 110;
+    } else if (ns[pi2].led_id == i) {
+      hsv.h = ns[pi2].hsv.h;
+      hsv.s = ns[pi2].hsv.s;
+      hsv.v = 70;
+    } else if (ns[pi3].led_id == i) {
+      hsv.h = ns[pi3].hsv.h;
+      hsv.s = ns[pi3].hsv.s;
+      hsv.v = 30;
+    } else {
+      hsv.h = 0;
+      hsv.s = 0;
+      hsv.v = 0;
+    }
+
+    RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
+    rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+  }
+}
+
+path_node_t pn_numpad[] = {
+  // 1-9
+  { {170, 255, 0}, 20},
+  { {170, 255, 0}, 15},
+  { {170, 255, 0}, 12},
+  { {170, 255, 0}, 19},
+  { {170, 255, 0}, 16},
+  { {170, 255, 0}, 11},
+  { {170, 255, 0}, 18},
+  { {170, 255, 0}, 17},
+  { {170, 255, 0}, 10},
+
+  // 0 in two places
+  { {170, 255, 0}, 9},
+  { {170, 255, 0}, 25},
+
+  // the final two symbols
+  { {35, 255, 0}, 8},
+  { {35, 255, 0}, 7},
+
+};
+
 static bool my_cool_effect(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+
+  draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), led_min, led_max);
+
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+static uint8_t init_index = 0;
+
+static bool my_cool_effect2(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
   // magic time taken from BREATHING animation
   uint16_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 100);
   // determine the primary led index
   //uint8_t pi = (time % (led_max - led_min)) + led_min;
-  uint8_t pi0 = (time % (DRIVER_LED_TOTAL - 0)) + 0;
-  uint8_t pi1 = ((pi0-1) % (DRIVER_LED_TOTAL - 0)) + 0;
-  uint8_t pi2 = ((pi1-1) % (DRIVER_LED_TOTAL - 0)) + 0;
-  uint8_t pi3 = ((pi2-1) % (DRIVER_LED_TOTAL - 0)) + 0;
-  uint8_t pi4 = ((pi3-1) % (DRIVER_LED_TOTAL - 0)) + 0;
+  uint8_t pi0 = time % DRIVER_LED_TOTAL;
+  uint8_t pi1 = (pi0-1 +DRIVER_LED_TOTAL) % DRIVER_LED_TOTAL;
+  uint8_t pi2 = (pi1-1 +DRIVER_LED_TOTAL) % DRIVER_LED_TOTAL;
+  uint8_t pi3 = (pi2-1 +DRIVER_LED_TOTAL) % DRIVER_LED_TOTAL;
+  uint8_t pi4 = (pi3-1 +DRIVER_LED_TOTAL) % DRIVER_LED_TOTAL;
 
-  //uprintf("led_min:%d led_max:%d time:%d pi:%d total:%d\n", led_min,
-  // led_max, time, pi, DRIVER_LED_TOTAL); The above debug statement
-  // shows that the corne has a DRIVER_LED_TOTAL of 54. This function
-  // is getting called three times with led_min/max of (0,11) (11,22)
-  // (22,27). Only have half the keyboard is plugged in so I would
-  // expect it to go all the way up to 54 if the other half was
-  // plugged in. It seems led_min, led_max is just what leds are
-  // expected to change for this call and are not representative of
-  // the total number of leds. I should instead use
-  // (0,DRIVER_LED_TOTAL) for normalization.
+  if (params->init) {
+    // just to see how many times init is called. Check with both
+    // halves of the keyboard enabled.
+    //uprintf("led_min:%d led_max:%d time:%d pi:%d total:%d\n", led_min, led_max, time, pi0, DRIVER_LED_TOTAL);
+    // the above call is not getting sent problably because it is happening so close to startup
 
-  HSV hsv = {0xc0, 0xc0, 100};
-  
+    // we can inspect this during a later cycle
+    ++init_index;
+  }
+  uprintf("led_min:%d led_max:%d time:%d pi:%d total:%d init:%d\n", led_min, led_max, time, pi0, DRIVER_LED_TOTAL, init_index);
+
   for (uint8_t i = led_min; i < led_max; i++) {
     RGB_MATRIX_TEST_LED_FLAGS();
 
+    HSV hsv = {0xc0, 0xc0, 100};
+
     // only light the primary led
-    if (i == pi0) {
+    if (i == init_index) {
+      // we'll have to count how far this goes into the indexes to see
+      // how many times init was called
+      hsv.h = 0;
+      hsv.s = 255;
+      hsv.v = 150;
+    } else if (i == pi0) {
       hsv.v = 150;
     } else if (i == pi1) {
       hsv.v = 100;

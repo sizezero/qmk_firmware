@@ -142,8 +142,8 @@ void keyboard_post_init_user(void) {
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_MOOD);
 
-  //debug_enable = true;
-  //debug_matrix = true;
+  debug_enable = true;
+  debug_matrix = true;
 
   //rgb_matrix_set_color_all(0, 255, 0); // works
   //rgb_matrix_sethsv(191, 43, 81);
@@ -155,10 +155,3 @@ void keyboard_post_init_user(void) {
 }
 #endif
 
-// todo: change the animation mode based on layers. Testing this is
-// difficult until we get switches.
-
-// todo: allow some keystroke to enable and disable animations, maybe
-// there's a standard key
-
-// todo: create custom animations
