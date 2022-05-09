@@ -19,3 +19,6 @@ RGB_MATRIX_CUSTOM_USER = yes
 
 # load the old keymap.c
 SRC += default.c
+
+# trying to debug animations
+#CONSOLE_ENABLE = yes

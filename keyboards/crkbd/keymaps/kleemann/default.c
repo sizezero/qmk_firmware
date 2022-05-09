@@ -142,6 +142,9 @@ void keyboard_post_init_user(void) {
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_MOOD);
 
+  //debug_enable = true;
+  //debug_matrix = true;
+
   //rgb_matrix_set_color_all(0, 255, 0); // works
   //rgb_matrix_sethsv(191, 43, 81);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON); // works
