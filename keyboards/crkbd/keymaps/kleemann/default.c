@@ -134,7 +134,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // kleemann
 
-// TODO: I bet this ifdef was messing up my matrix commands
 #ifdef RGB_MATRIX_ENABLE
 void keyboard_post_init_user(void) {
   rgblight_enable_noeeprom(); // Enables RGB, without saving settings
@@ -151,7 +150,7 @@ void keyboard_post_init_user(void) {
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_TYPING_HEATMAP);
-  rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_my_cool_effect);
+  rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
 }
 #endif
 
