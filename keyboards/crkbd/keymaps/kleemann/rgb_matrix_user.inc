@@ -93,7 +93,6 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
   const uint32_t step = 200; // 980 about a second of g_rgb_timer
   const uint32_t fade = 6;   // the number of nodes before intensity fades to nothing
   const uint32_t space = step*fade*2; // push out the x axis so we don't have to deal with wrapping
-  const uint8_t max_intensity = 150;
   const uint64_t rt = (g_rgb_timer % (serial_count*step)) + space;
   const uint64_t lower = rt - step*fade;
 
@@ -117,7 +116,7 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
         if (lower < inrt && inrt <= rt) {
           hsv.h = ns[in].hue;
           hsv.s = ns[in].saturation;
-          hsv.v = ((inrt - lower) * max_intensity) / (step*fade);
+          hsv.v = ((inrt - lower) * RGB_MATRIX_MAXIMUM_BRIGHTNESS) / (step*fade);
           break;
         }
       }
