@@ -61,6 +61,11 @@ typedef struct PACKED {
   uint8_t led_id;
 } path_node_t;
 
+// some defines useful for populating path_node_t
+#define HV_BLUE 177, 255
+#define HV_GOLD 35, 255
+#define PN_BLACK 0, 0, 255
+
 // Meant to be called from an rgb matrix animation funciton.
 //
 // ns: an array of path_node_t that will be drawn in order
@@ -105,9 +110,6 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
   }
 }
 
-#define HV_BLUE 177, 255
-#define HV_GOLD 35, 255
-#define NODE_BLACK 0, 0, 255
 // LED ids can be found in keyboards/crkbd/rev1.c
 path_node_t pn_numpad[] = {
   // 1-9
@@ -130,10 +132,10 @@ path_node_t pn_numpad[] = {
   { HV_GOLD, 7},
 
   // add some null nodes just for spacing
-  { NODE_BLACK },
-  { NODE_BLACK },
-  { NODE_BLACK },
-  { NODE_BLACK },
+  { PN_BLACK },
+  { PN_BLACK },
+  { PN_BLACK },
+  { PN_BLACK },
 };
 
 static bool animation_numpad(effect_params_t* params) {
