@@ -83,18 +83,18 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
   //uprintf("led_min:%d led_max:%d time:%d g_rgb_timer:%u total:%d\n", led_min, led_max, time, g_rgb_timer, DRIVER_LED_TOTAL);
 
   // the count of the number of serial nodes
-  uint8_t scount = 0;
+  uint8_t serial_count = 0;
   for (uint8_t i = 0 ; i<count ; i++) {
     if (ns[i].parallel == PN_SER) {
-      scount++;
+      serial_count++;
     }
   }
 
   const uint32_t step = 200; // 980 about a second of g_rgb_timer
-  const uint32_t fade = 6;   // the number of nodes before intesity fades to nothing
+  const uint32_t fade = 6;   // the number of nodes before intensity fades to nothing
   const uint32_t space = step*fade*2; // push out the x axis so we don't have to deal with wrapping
   const uint8_t max_intensity = 150;
-  const uint64_t rt = (g_rgb_timer % (scount*step)) + space;
+  const uint64_t rt = (g_rgb_timer % (serial_count*step)) + space;
   const uint64_t lower = rt - step*fade;
 
   HSV hsv;
@@ -105,19 +105,19 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
     hsv.s = 0;
     hsv.v = 0;
 
-    // TODO: this is super inefficient
-    uint8_t sin = 0;
-    for (uint8_t in = 0 ; in < count ; in++) {
+    uint8_t serial_in = 0; // the index of just the serial nodes, needed for math calculations
+
+    // I don't like this n^2 loop but it seems to work fine
+    for (uint8_t in = 0 ; in < count ; in++) { // index into ns for both serial and parallel nodes
       if (ns[in].parallel == PN_SER) {
-        sin++;
+        serial_in++;
       }
       if (ns[in].led_id == i) {
-        uint64_t inrt = sin*step + space;
+        uint64_t inrt = serial_in*step + space;
         if (lower < inrt && inrt <= rt) {
           hsv.h = ns[in].hue;
           hsv.s = ns[in].saturation;
           hsv.v = ((inrt - lower) * max_intensity) / (step*fade);
-          //uprintf("led:%d, node:%d value:%d", i, in, hsv.v);
           break;
         }
       }
