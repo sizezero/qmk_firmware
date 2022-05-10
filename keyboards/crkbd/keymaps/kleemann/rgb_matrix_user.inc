@@ -59,12 +59,18 @@ typedef struct PACKED {
   uint8_t hue;
   uint8_t saturation;
   uint8_t led_id;
+  uint8_t parallel;
 } path_node_t;
 
 // some defines useful for populating path_node_t
-#define HV_BLUE 177, 255
-#define HV_GOLD 35, 255
-#define PN_BLACK 0, 0, 255
+#define HV_BLUE   177, 255
+#define HV_PURPLE 191, 255
+#define HV_GOLD    35, 255
+
+#define PN_PAR 1
+#define PN_SER 0
+
+#define PN_BLACK 0, 0, 255, PN_SER
 
 // Meant to be called from an rgb matrix animation funciton.
 //
@@ -76,11 +82,19 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
 
   //uprintf("led_min:%d led_max:%d time:%d g_rgb_timer:%u total:%d\n", led_min, led_max, time, g_rgb_timer, DRIVER_LED_TOTAL);
 
+  // the count of the number of serial nodes
+  uint8_t scount = 0;
+  for (uint8_t i = 0 ; i<count ; i++) {
+    if (ns[i].parallel == PN_SER) {
+      scount++;
+    }
+  }
+
   const uint32_t step = 200; // 980 about a second of g_rgb_timer
   const uint32_t fade = 6;   // the number of nodes before intesity fades to nothing
   const uint32_t space = step*fade*2; // push out the x axis so we don't have to deal with wrapping
   const uint8_t max_intensity = 150;
-  const uint64_t rt = (g_rgb_timer % (count*step)) + space;
+  const uint64_t rt = (g_rgb_timer % (scount*step)) + space;
   const uint64_t lower = rt - step*fade;
 
   HSV hsv;
@@ -92,9 +106,13 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
     hsv.v = 0;
 
     // TODO: this is super inefficient
+    uint8_t sin = 0;
     for (uint8_t in = 0 ; in < count ; in++) {
+      if (ns[in].parallel == PN_SER) {
+        sin++;
+      }
       if (ns[in].led_id == i) {
-        uint64_t inrt = in*step + space;
+        uint64_t inrt = sin*step + space;
         if (lower < inrt && inrt <= rt) {
           hsv.h = ns[in].hue;
           hsv.s = ns[in].saturation;
@@ -113,23 +131,23 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
 // LED ids can be found in keyboards/crkbd/rev1.c
 path_node_t pn_numpad[] = {
   // 1-9
-  { HV_BLUE, 20},
-  { HV_BLUE, 15},
-  { HV_BLUE, 12},
-  { HV_BLUE, 19},
-  { HV_BLUE, 16},
-  { HV_BLUE, 11},
-  { HV_BLUE, 18},
-  { HV_BLUE, 17},
-  { HV_BLUE, 10},
+  { HV_BLUE, 20, PN_SER},
+  { HV_BLUE, 15, PN_SER},
+  { HV_BLUE, 12, PN_SER},
+  { HV_BLUE, 19, PN_SER},
+  { HV_BLUE, 16, PN_SER},
+  { HV_BLUE, 11, PN_SER},
+  { HV_BLUE, 18, PN_SER},
+  { HV_BLUE, 17, PN_SER},
+  { HV_BLUE, 10, PN_SER},
 
   // 0 in two places
-  { HV_BLUE, 9},
-  { HV_BLUE, 22},
+  { HV_PURPLE, 9,  PN_SER},
+  { HV_PURPLE, 22, PN_PAR},
 
   // the final two symbols
-  { HV_GOLD, 8},
-  { HV_GOLD, 7},
+  { HV_GOLD, 8, PN_SER},
+  { HV_GOLD, 7, PN_SER},
 
   // add some null nodes just for spacing
   { PN_BLACK },
