@@ -43,6 +43,11 @@
 // about three times. It is probably called once with each of the led
 // ranges.
 
+// Informally logged uint32 g_rgb_timer. In 60 seconds it reached up
+// to 59K. a few seconds later it underflowed back to 0. This means 1
+// second is about 980 ticks. I have no idea if this can be counted on
+// or if it is just based on each microcontroller.
+
 // TODO: make a function that accepts a chain of keys/colors
 
 // Step 1.
@@ -62,39 +67,39 @@ typedef struct PACKED {
 
 static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uint8_t led_max) {
 
-  // magic time taken from BREATHING animation
-  uint16_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 100);
+  // magic time taken from BREATHING animation. It seems to range
+  // between 0 and 255.
+  //uint16_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 100);
 
-  // indexes into ns
-  uint8_t pi0 = time % count;
-  uint8_t pi1 = (pi0-1 +count) % count;
-  uint8_t pi2 = (pi1-1 +count) % count;
-  uint8_t pi3 = (pi2-1 +count) % count;
+  //uprintf("led_min:%d led_max:%d time:%d g_rgb_timer:%u total:%d\n", led_min, led_max, time, g_rgb_timer, DRIVER_LED_TOTAL);
+
+  const uint32_t step = 200; // 980 about a second of g_rgb_timer
+  const uint32_t fade = 6;   // the number of nodes before intesity fades to nothing
+  const uint32_t space = step*fade*2; // push out the x axis so we don't have to deal with wrapping
+  const uint8_t max_intensity = 150;
+  const uint64_t rt = (g_rgb_timer % (count*step)) + space;
+  const uint64_t lower = rt - step*fade;
 
   HSV hsv;
 
   for (uint8_t i = led_min; i < led_max; i++) {
 
-    if (ns[pi0].led_id == i) {
-      hsv.h = ns[pi0].hsv.h;
-      hsv.s = ns[pi0].hsv.s;
-      hsv.v = 150;
-    } else if (ns[pi1].led_id == i) {
-      hsv.h = ns[pi1].hsv.h;
-      hsv.s = ns[pi1].hsv.s;
-      hsv.v = 110;
-    } else if (ns[pi2].led_id == i) {
-      hsv.h = ns[pi2].hsv.h;
-      hsv.s = ns[pi2].hsv.s;
-      hsv.v = 70;
-    } else if (ns[pi3].led_id == i) {
-      hsv.h = ns[pi3].hsv.h;
-      hsv.s = ns[pi3].hsv.s;
-      hsv.v = 30;
-    } else {
-      hsv.h = 0;
-      hsv.s = 0;
-      hsv.v = 0;
+    hsv.h = 0;
+    hsv.s = 0;
+    hsv.v = 0;
+
+    // TODO: this is super inefficient
+    for (uint8_t in = 0 ; in < count ; in++) {
+      if (ns[in].led_id == i) {
+        uint64_t inrt = in*step + space;
+        if (lower < inrt && inrt <= rt) {
+          hsv.h = ns[in].hsv.h;
+          hsv.s = ns[in].hsv.s;
+          hsv.v = ((inrt - lower) * max_intensity) / (step*fade);
+          //uprintf("led:%d, node:%d value:%d", i, in, hsv.v);
+          break;
+        }
+      }
     }
 
     RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
@@ -122,6 +127,11 @@ path_node_t pn_numpad[] = {
   { {35, 255, 0}, 8},
   { {35, 255, 0}, 7},
 
+  // add some null nodes just for spacing
+  { {0, 0, 0}, 255},
+  { {0, 0, 0}, 255},
+  { {0, 0, 0}, 255},
+  { {0, 0, 0}, 255},
 };
 
 static bool my_cool_effect(effect_params_t* params) {
