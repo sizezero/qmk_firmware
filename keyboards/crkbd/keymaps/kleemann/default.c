@@ -158,6 +158,7 @@ void keyboard_post_init_user(void) {
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_symbol);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_function);
+
 }
 #endif
 
