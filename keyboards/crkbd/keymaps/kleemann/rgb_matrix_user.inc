@@ -66,6 +66,7 @@ typedef struct PACKED {
 #define HV_BLUE   177, 255
 #define HV_PURPLE 191, 255
 #define HV_GOLD    35, 255
+#define HV_RED      0, 255
 
 #define PN_PAR 1
 #define PN_SER 0
@@ -129,6 +130,14 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint32_t step, uint3
           hsv.v = ((inrt - lower) * RGB_MATRIX_MAXIMUM_BRIGHTNESS) / (step*fade);
           break;
         }
+        // when we wrap around from high to low we need to retest the higher indices
+        inrt -= serial_count*step;
+        if (lower < inrt && inrt <= rt) {
+          hsv.h = ns[in].hue;
+          hsv.s = ns[in].saturation;
+          hsv.v = ((inrt - lower) * RGB_MATRIX_MAXIMUM_BRIGHTNESS) / (step*fade);
+          break;
+        }
       }
     }
 
@@ -158,17 +167,17 @@ path_node_t pn_numpad[] = {
   { HV_GOLD, 8, PN_SER},
   { HV_GOLD, 7, PN_SER},
 
+  // period
+  { HV_RED, 21, PN_SER},
+
   // add some null nodes just for spacing
-  { PN_BLACK },
-  { PN_BLACK },
-  { PN_BLACK },
-  { PN_BLACK },
+  //{ PN_BLACK },
 };
 
 static bool animation_numpad(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
-  draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), 200, 6, led_min, led_max);
+  draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), 80, 8, led_min, led_max);
 
   return rgb_matrix_check_finished_leds(led_max);
 }
