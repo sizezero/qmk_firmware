@@ -46,11 +46,20 @@
 // Step 1.
 // Declare custom effects using the RGB_MATRIX_EFFECT macro
 // (note the lack of semicolon after the macro!)
+RGB_MATRIX_EFFECT(animation_base)
+RGB_MATRIX_EFFECT(animation_navigation)
+RGB_MATRIX_EFFECT(animation_braces)
+RGB_MATRIX_EFFECT(animation_window_manager)
 RGB_MATRIX_EFFECT(animation_numpad)
+RGB_MATRIX_EFFECT(animation_symbol)
+RGB_MATRIX_EFFECT(animation_function)
 
 // Step 2.
 // Define effects inside the `RGB_MATRIX_CUSTOM_EFFECT_IMPLS` ifdef block
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+
+// -----------------------------------------------------------------
+// reusable structures, defines, and function for drawing a snake-like path of LEDs
 
 // An element that represents a single LED in a chain that will be
 // lit. An array of these structures is a parameter to
@@ -67,6 +76,8 @@ typedef struct PACKED {
 #define HV_PURPLE 191, 255
 #define HV_GOLD    35, 255
 #define HV_RED      0, 255
+#define HV_ORANGE  28, 255
+#define HV_GREEN   85, 255
 
 #define PN_PAR 1
 #define PN_SER 0
@@ -146,6 +157,127 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint32_t step, uint3
   }
 }
 
+// -----------------------------------------------------------------
+// animation_base
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_base[] = {
+  // windows
+  { HV_PURPLE,  8, PN_SER },
+  { HV_PURPLE, 35, PN_PAR },
+  // index, thumbs
+  { HV_GOLD, 11, PN_SER },
+  { HV_GOLD, 13, PN_PAR },
+  { HV_GOLD, 38, PN_PAR },
+  { HV_GOLD, 40, PN_PAR },
+  // ctrl
+  { HV_GREEN, 16, PN_SER },
+  { HV_GREEN, 43, PN_PAR },
+  // shift
+  { HV_RED, 19, PN_SER },
+  { HV_RED, 46, PN_PAR },
+  // alt
+  { HV_BLUE, 22, PN_SER },
+  { HV_BLUE, 49, PN_PAR },
+};
+
+static bool animation_base(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_base, sizeof(pn_base)/sizeof(pn_base[0]), 200, 4, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+// -----------------------------------------------------------------
+// animation_navigation
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_navigation[] = {
+  // navigation diamond
+  { HV_GOLD, 43, PN_SER },
+  { HV_GOLD, 38, PN_SER },
+  { HV_GOLD, 44, PN_PAR },
+  { HV_GOLD, 46, PN_PAR },
+
+  // home/end
+  { HV_GREEN, 37, PN_SER },
+  { HV_GREEN, 45, PN_SER },
+
+  // print screen
+  { HV_BLUE, 50, PN_SER },
+
+  // pageup/pagedown
+  { HV_PURPLE, 34, PN_SER },
+  { HV_PURPLE, 39, PN_SER },
+
+  // caps lock
+  { HV_RED, 40, PN_SER },
+};
+
+static bool animation_navigation(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_navigation, sizeof(pn_navigation)/sizeof(pn_navigation[0]), 120, 6, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+// -----------------------------------------------------------------
+// animation_braces
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_braces[] = {
+  // ()
+  { HV_RED, 37, PN_SER },
+  { HV_RED, 44, PN_SER },
+
+  // {}
+  { HV_GREEN, 38, PN_SER },
+  { HV_GREEN, 43, PN_SER },
+
+  // []
+  { HV_BLUE, 39, PN_SER },
+  { HV_BLUE, 42, PN_SER },
+
+  // other punctuation
+  { HV_GOLD, 34, PN_SER },
+  { HV_GOLD, 45, PN_PAR },
+  { HV_GOLD, 46, PN_PAR },
+  { HV_GOLD, 49, PN_PAR },
+};
+
+static bool animation_braces(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_braces, sizeof(pn_braces)/sizeof(pn_braces[0]), 80, 6, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+// -----------------------------------------------------------------
+// animation_window_manager
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_window_manager[] = {
+  // app max/min, shove left/right
+  { HV_GOLD, 16, PN_SER },
+  { HV_GOLD, 11, PN_SER },
+  { HV_GOLD, 17, PN_PAR },
+  { HV_GOLD, 19, PN_PAR },
+
+  // move workspace left/right
+  { HV_GREEN, 18, PN_SER },
+  { HV_GREEN, 10, PN_SER },
+
+  // move app to left/right workspace
+  { HV_BLUE, 12, PN_SER },
+  { HV_BLUE, 20, PN_SER },
+};
+
+static bool animation_window_manager(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_window_manager, sizeof(pn_window_manager)/sizeof(pn_window_manager[0]), 120, 5, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+// -----------------------------------------------------------------
+// animation_numpad
+
 // LED ids can be found in keyboards/crkbd/rev1.c
 path_node_t pn_numpad[] = {
   // 1-9
@@ -169,16 +301,70 @@ path_node_t pn_numpad[] = {
 
   // period
   { HV_RED, 21, PN_SER},
-
-  // add some null nodes just for spacing
-  //{ PN_BLACK },
 };
 
 static bool animation_numpad(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
-
   draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), 80, 8, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
 
+// -----------------------------------------------------------------
+// animation_symbol
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_symbol[] = {
+  // 1-9
+  { HV_GOLD, 20, PN_SER},
+  { HV_GOLD, 15, PN_SER},
+  { HV_GOLD, 12, PN_SER},
+  { HV_GOLD, 19, PN_SER},
+  { HV_GOLD, 16, PN_SER},
+  { HV_GOLD, 11, PN_SER},
+  { HV_GOLD, 18, PN_SER},
+  { HV_GOLD, 17, PN_SER},
+  { HV_GOLD, 10, PN_SER},
+
+  // right column
+  { HV_GOLD, 9, PN_SER},
+  { HV_GOLD, 8, PN_SER},
+  { HV_GOLD, 7, PN_SER},
+
+  // the final symbol
+  { HV_PURPLE, 22, PN_SER},
+};
+
+static bool animation_symbol(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_symbol, sizeof(pn_symbol)/sizeof(pn_symbol[0]), 80, 8, led_min, led_max);
+  return rgb_matrix_check_finished_leds(led_max);
+}
+
+// -----------------------------------------------------------------
+// animation_function
+
+// LED ids can be found in keyboards/crkbd/rev1.c
+path_node_t pn_function[] = {
+  // 1-9
+  { HV_RED, 20, PN_SER},
+  { HV_RED, 15, PN_SER},
+  { HV_RED, 12, PN_SER},
+  { HV_RED, 19, PN_SER},
+  { HV_RED, 16, PN_SER},
+  { HV_RED, 11, PN_SER},
+  { HV_RED, 18, PN_SER},
+  { HV_RED, 17, PN_SER},
+  { HV_RED, 10, PN_SER},
+
+  // right column
+  { HV_RED, 9, PN_SER},
+  { HV_RED, 8, PN_SER},
+  { HV_RED, 7, PN_SER},
+};
+
+static bool animation_function(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  draw_path_nodes(pn_function, sizeof(pn_function)/sizeof(pn_function[0]), 80, 8, led_min, led_max);
   return rgb_matrix_check_finished_leds(led_max);
 }
 

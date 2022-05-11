@@ -150,7 +150,14 @@ void keyboard_post_init_user(void) {
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_TYPING_HEATMAP);
-  rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
+
+  rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_base);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_navigation);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_braces);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_window_manager);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_symbol);
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_function);
 }
 #endif
 
