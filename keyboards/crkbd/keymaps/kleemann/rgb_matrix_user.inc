@@ -75,10 +75,22 @@ typedef struct PACKED {
 // Meant to be called from an rgb matrix animation funciton.
 //
 // ns: an array of path_node_t that will be drawn in order
+//
 // count: the number of elements in the ns array
+//
+// step: the number of units of g_rgb_timer to use to count the
+// progress of the LEDs. A value of 980 will result in the LEDs
+// marching forward about once every second. Smaller values than this
+// will be proportionately faster.
+//
+// fade: the number of trailing LEDs that will be lit. E.g. this is
+// the length of the "snake" produced by the lighting.
+//
 // led_min: the starting led index passed in from the animation function
+//
 // led_max: the ending led index plus one passed in from the animation function
-static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uint8_t led_max) {
+//
+static void draw_path_nodes(path_node_t* ns, uint8_t count, uint32_t step, uint32_t fade, uint8_t led_min, uint8_t led_max) {
 
   //uprintf("led_min:%d led_max:%d time:%d g_rgb_timer:%u total:%d\n", led_min, led_max, time, g_rgb_timer, DRIVER_LED_TOTAL);
 
@@ -90,8 +102,6 @@ static void draw_path_nodes(path_node_t* ns, uint8_t count, uint8_t led_min, uin
     }
   }
 
-  const uint32_t step = 200; // 980 about a second of g_rgb_timer
-  const uint32_t fade = 6;   // the number of nodes before intensity fades to nothing
   const uint32_t space = step*fade*2; // push out the x axis so we don't have to deal with wrapping
   const uint64_t rt = (g_rgb_timer % (serial_count*step)) + space;
   const uint64_t lower = rt - step*fade;
@@ -158,7 +168,7 @@ path_node_t pn_numpad[] = {
 static bool animation_numpad(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
-  draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), led_min, led_max);
+  draw_path_nodes(pn_numpad, sizeof(pn_numpad)/sizeof(pn_numpad[0]), 200, 6, led_min, led_max);
 
   return rgb_matrix_check_finished_leds(led_max);
 }
