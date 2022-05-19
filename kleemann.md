@@ -29,6 +29,10 @@ From the [full instructions](https://beta.docs.qmk.fm/tutorial/newbs_getting_sta
     cd ~/bin
     ln -s ../.local/bin/qmk qmk
 
+After upgrading ubuntu I had to rerun:
+
+    python3 -m pip install --user qmk
+
 # Building and Flashing
 
 Once:
