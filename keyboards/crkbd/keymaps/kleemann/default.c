@@ -1,6 +1,6 @@
 /*
 Copyright 2019 @foostan
-Copyright 2020 Drashna Jaelre <@drashna>
+Copyright 2022 Robert Kleemann
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef RGB_MATRIX_ENABLE
 void keyboard_post_init_user(void) {
-  rgblight_enable_noeeprom(); // Enables RGB, without saving settings
+  rgblight_disable_noeeprom();
   //rgblight_sethsv_noeeprom(HSV_PURPLE);
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
   //rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_MOOD);
@@ -147,7 +147,7 @@ void keyboard_post_init_user(void) {
   //rgb_matrix_set_color_all(0, 255, 0); // works
   //rgb_matrix_sethsv(191, 43, 81);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON); // works
-  rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING); // works
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT); // works
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_TYPING_HEATMAP);
 
@@ -158,7 +158,37 @@ void keyboard_post_init_user(void) {
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_symbol);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_function);
-
 }
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case LAYER_BASE:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_base);
+      break;
+    case LAYER_NAV:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_navigation);
+      break;
+    case LAYER_BRACES:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_braces);
+      break;
+    case LAYER_WINDOW_MANAGER:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_window_manager);
+      break;
+    case LAYER_NUMPAD:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
+      break;
+    case LAYER_SHIFT_NUMPAD:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_symbol);
+      break;
+    case LAYER_FUNCTION_KEYS:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_function);
+      break;
+    default:
+      rgb_matrix_sethsv_noeeprom(0, 0, 0);
+      break;
+    }
+    return state;
+}
+
 #endif
 
