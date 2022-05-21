@@ -135,30 +135,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // kleemann
 
 #ifdef RGB_MATRIX_ENABLE
-void keyboard_post_init_user(void) {
-  rgblight_disable_noeeprom();
-  //rgblight_sethsv_noeeprom(HSV_PURPLE);
-  //rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
-  //rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_MOOD);
+//void keyboard_post_init_user(void) {
 
+  // one time disable of rgb matrix for default
+  //rgb_matrix_disable();
+
+  // No matter what I do, RGB underglow #1 lights up green 80% of the
+  // time on startup. It must be a hardware issue, maybe a bad
+  // solder. The temporary workaround is to turn lighting on and off
+  // via keystrokes.
+  //rgb_matrix_enable_noeeprom();
+  //rgb_matrix_set_color_all(0, 0, 0);
+  //rgb_matrix_sethsv_noeeprom(0, 0, 0);
+  //rgb_matrix_disable_noeeprom();
+
+  // needed for console debugging
   //debug_enable = true;
   //debug_matrix = true;
 
+  // these were used for testing; leaving them here as an FYI
   //rgb_matrix_set_color_all(0, 255, 0); // works
   //rgb_matrix_sethsv(191, 43, 81);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON); // works
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING); // works
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT); // works
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_TYPING_HEATMAP);
-
+  //rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_base);
   //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_navigation);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_braces);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_window_manager);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_numpad);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_symbol);
-  //rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_function);
-}
+//}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
