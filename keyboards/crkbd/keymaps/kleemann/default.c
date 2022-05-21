@@ -29,7 +29,8 @@ enum layers {
     LAYER_BRACES,
     LAYER_FUNCTION_KEYS,
     LAYER_GAMING,
-    LAYER_GAMING_TOGGLE
+    LAYER_GAMING_TOGGLE,
+    LAYER_DOTA
 };
 
 // begin: copy and pasted oled code
@@ -46,12 +47,15 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 // won't work
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state) {
+    switch (get_highest_layer(layer_state)) {
         case LAYER_BASE:
-            oled_write_ln_P(PSTR("Default"), false);
+            oled_write_ln_P(PSTR("Base"), false);
             break;
         case LAYER_GAMING:
             oled_write_ln_P(PSTR("Gaming"), false);
+            break;
+        case LAYER_DOTA:
+            oled_write_ln_P(PSTR("DOTA"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Adjust"), false);
