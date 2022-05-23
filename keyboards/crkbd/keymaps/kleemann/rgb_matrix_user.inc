@@ -72,7 +72,8 @@ typedef struct PACKED {
 } path_node_t;
 
 // some defines useful for populating path_node_t
-#define HV_BLUE   177, 255
+#define HV_AZURE  148, 255
+#define HV_BLUE   169, 255
 #define HV_PURPLE 191, 255
 #define HV_GOLD    35, 255
 #define HV_RED      0, 255
@@ -177,8 +178,8 @@ path_node_t pn_base[] = {
   { HV_RED, 19, PN_SER },
   { HV_RED, 46, PN_PAR },
   // alt
-  { HV_BLUE, 22, PN_SER },
-  { HV_BLUE, 49, PN_PAR },
+  { HV_AZURE, 22, PN_SER },
+  { HV_AZURE, 49, PN_PAR },
 };
 
 static bool animation_base(effect_params_t* params) {
@@ -192,30 +193,31 @@ static bool animation_base(effect_params_t* params) {
 
 // LED ids can be found in keyboards/crkbd/rev1.c
 path_node_t pn_navigation[] = {
+  // home/end
+  { HV_GREEN, 37, PN_SER },
+  { HV_GREEN, 45, PN_PAR },
+
   // navigation diamond
   { HV_GOLD, 43, PN_SER },
-  { HV_GOLD, 38, PN_SER },
+  { HV_GOLD, 38, PN_PAR },
   { HV_GOLD, 44, PN_PAR },
   { HV_GOLD, 46, PN_PAR },
 
-  // home/end
-  { HV_GREEN, 37, PN_SER },
-  { HV_GREEN, 45, PN_SER },
+  // pageup/pagedown
+  { HV_PURPLE, 34, PN_SER },
+  { HV_PURPLE, 39, PN_PAR },
+
+  // caps lock
+  { HV_RED, 40, PN_SER },
 
   // print screen
   { HV_BLUE, 50, PN_SER },
 
-  // pageup/pagedown
-  { HV_PURPLE, 34, PN_SER },
-  { HV_PURPLE, 39, PN_SER },
-
-  // caps lock
-  { HV_RED, 40, PN_SER },
 };
 
 static bool animation_navigation(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
-  draw_path_nodes(pn_navigation, sizeof(pn_navigation)/sizeof(pn_navigation[0]), 120, 6, led_min, led_max);
+  draw_path_nodes(pn_navigation, sizeof(pn_navigation)/sizeof(pn_navigation[0]), 180, 5, led_min, led_max);
   return rgb_matrix_check_finished_leds(led_max);
 }
 
@@ -226,26 +228,26 @@ static bool animation_navigation(effect_params_t* params) {
 path_node_t pn_braces[] = {
   // ()
   { HV_RED, 37, PN_SER },
-  { HV_RED, 44, PN_SER },
+  { HV_RED, 44, PN_PAR },
 
   // {}
   { HV_GREEN, 38, PN_SER },
-  { HV_GREEN, 43, PN_SER },
+  { HV_GREEN, 43, PN_PAR },
 
   // []
   { HV_BLUE, 39, PN_SER },
-  { HV_BLUE, 42, PN_SER },
+  { HV_BLUE, 42, PN_PAR },
 
   // other punctuation
   { HV_GOLD, 34, PN_SER },
-  { HV_GOLD, 45, PN_PAR },
+  { HV_GOLD, 45, PN_SER },
   { HV_GOLD, 46, PN_PAR },
   { HV_GOLD, 49, PN_PAR },
 };
 
 static bool animation_braces(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
-  draw_path_nodes(pn_braces, sizeof(pn_braces)/sizeof(pn_braces[0]), 80, 6, led_min, led_max);
+  draw_path_nodes(pn_braces, sizeof(pn_braces)/sizeof(pn_braces[0]), 180, 4, led_min, led_max);
   return rgb_matrix_check_finished_leds(led_max);
 }
 
@@ -254,24 +256,24 @@ static bool animation_braces(effect_params_t* params) {
 
 // LED ids can be found in keyboards/crkbd/rev1.c
 path_node_t pn_window_manager[] = {
+  // move workspace left/right
+  { HV_GREEN, 18, PN_SER },
+  { HV_GREEN, 10, PN_PAR },
+
   // app max/min, shove left/right
   { HV_GOLD, 16, PN_SER },
-  { HV_GOLD, 11, PN_SER },
+  { HV_GOLD, 11, PN_PAR },
   { HV_GOLD, 17, PN_PAR },
   { HV_GOLD, 19, PN_PAR },
 
-  // move workspace left/right
-  { HV_GREEN, 18, PN_SER },
-  { HV_GREEN, 10, PN_SER },
-
   // move app to left/right workspace
   { HV_BLUE, 12, PN_SER },
-  { HV_BLUE, 20, PN_SER },
+  { HV_BLUE, 20, PN_PAR },
 };
 
 static bool animation_window_manager(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
-  draw_path_nodes(pn_window_manager, sizeof(pn_window_manager)/sizeof(pn_window_manager[0]), 120, 5, led_min, led_max);
+  draw_path_nodes(pn_window_manager, sizeof(pn_window_manager)/sizeof(pn_window_manager[0]), 180, 2, led_min, led_max);
   return rgb_matrix_check_finished_leds(led_max);
 }
 
@@ -329,9 +331,6 @@ path_node_t pn_symbol[] = {
   { HV_GOLD, 9, PN_SER},
   { HV_GOLD, 8, PN_SER},
   { HV_GOLD, 7, PN_SER},
-
-  // the final symbol
-  { HV_PURPLE, 22, PN_SER},
 };
 
 static bool animation_symbol(effect_params_t* params) {
