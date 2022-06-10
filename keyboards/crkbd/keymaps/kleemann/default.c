@@ -44,11 +44,11 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 }
 
 void render_keylock_status(uint8_t led_usb_state) {
-    oled_write_P(PSTR("Lock:"), false);
-    oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR("N"), led_usb_state & (1 << USB_LED_NUM_LOCK));
-    oled_write_P(PSTR("C"), led_usb_state & (1 << USB_LED_CAPS_LOCK));
-    oled_write_ln_P(PSTR("S"), led_usb_state & (1 << USB_LED_SCROLL_LOCK));
+  if (led_usb_state & (1 << USB_LED_CAPS_LOCK)) {
+    oled_write_ln_P(PSTR("CAPS LOCK"), true);
+  } else {
+    oled_write_ln_P(PSTR(""), false);
+  }
 }
 
 // TODO: the original layers were defined as powers of two, maybe this
