@@ -112,7 +112,7 @@ simpler and good at verifying PCB connection and switches.
 
     make clean
     make crkbd/rev1:kleemann
-    make crkbd/r2g:kleemann:flash
+    make crkbd/rev1:kleemann:flash
 
 All builds say 97% full which means I only have 500 bytes left. Huh, I
 swaped keyboard.c with keyboard.json and it dropped to 83%. Ok,
