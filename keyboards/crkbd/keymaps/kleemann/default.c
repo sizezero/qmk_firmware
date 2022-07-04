@@ -115,7 +115,18 @@ void render_bootmagic_status(bool status) {
     }
 }
 
-// custom logo that says "Kleemann" and has a clover
+/*
+ * custom logo that says "Kleemann" and has a clover
+ *
+ * The project for this was found here
+ * https://github.com/joric/qle
+ * which leads to this site
+ * https://joric.github.io/qle/
+ *
+ * ...which lets you download a template image, modify it, and then
+ * reload to generate code. I decided not to futz with the original
+ * fonts so I used the raw image data which takes a little more space.
+ */
 static void oled_render_logo(void) {
     static const char PROGMEM raw_logo[] = {
         0,  0,  0,128,128,184,252,252,254,252,252,184,128,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
