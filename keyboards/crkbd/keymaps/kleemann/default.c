@@ -188,6 +188,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
+  // break out if we are not in one of our custom modes
+  switch(rgb_matrix_get_mode()) {
+  case RGB_MATRIX_CUSTOM_animation_base:
+  case RGB_MATRIX_CUSTOM_animation_navigation:
+  case RGB_MATRIX_CUSTOM_animation_braces:
+  case RGB_MATRIX_CUSTOM_animation_window_manager:
+  case RGB_MATRIX_CUSTOM_animation_numpad:
+  case RGB_MATRIX_CUSTOM_animation_symbol:
+  case RGB_MATRIX_CUSTOM_animation_function:
+    break;
+  default:
+    return state;
+  }
     switch (get_highest_layer(state)) {
     case LAYER_BASE:
       rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_animation_base);

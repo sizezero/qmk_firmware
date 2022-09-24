@@ -70,7 +70,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#    define ENABLE_RGB_MATRIX_ALPHAS_MODS
 //#    define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 //#    define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
-//#    define ENABLE_RGB_MATRIX_BREATHING
+#    define ENABLE_RGB_MATRIX_BREATHING
 //#    define ENABLE_RGB_MATRIX_BAND_SAT
 //#    define ENABLE_RGB_MATRIX_BAND_VAL
 //#    define ENABLE_RGB_MATRIX_BAND_PINWHEEL_SAT
@@ -80,7 +80,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#    define ENABLE_RGB_MATRIX_CYCLE_ALL
 //#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
 //#    define ENABLE_RGB_MATRIX_CYCLE_UP_DOWN
-//#    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
 //#    define ENABLE_RGB_MATRIX_CYCLE_OUT_IN
 //#    define ENABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
 //#    define ENABLE_RGB_MATRIX_CYCLE_PINWHEEL
