@@ -68,7 +68,7 @@ void oled_render_layer_state(void) {
             oled_write_ln_P(PSTR("DOTA"), false);
             break;
         case LAYER_ALIEN:
-            oled_write_ln_P(PSTR("Alien Isolation"), false);
+            oled_write_ln_P(PSTR("Alien"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Adjust"), false);
