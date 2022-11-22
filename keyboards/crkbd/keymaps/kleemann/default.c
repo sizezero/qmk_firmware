@@ -30,7 +30,9 @@ enum layers {
     LAYER_FUNCTION_KEYS,
     LAYER_GAMING,
     LAYER_GAMING_TOGGLE,
-    LAYER_DOTA
+    LAYER_DOTA,
+    LAYER_ALIEN,
+    LAYER_ALIEN_SHIFT
 };
 
 // begin: copy and pasted oled code
@@ -64,6 +66,9 @@ void oled_render_layer_state(void) {
             break;
         case LAYER_DOTA:
             oled_write_ln_P(PSTR("DOTA"), false);
+            break;
+        case LAYER_ALIEN:
+            oled_write_ln_P(PSTR("Alien Isolation"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Adjust"), false);
@@ -148,10 +153,63 @@ bool oled_task_user(void) {
     return false;
 }
 
+
+// special keycodes for Alien Isolation
+//enum my_keycodes {
+//  PEEK_W = SAFE_RANGE,
+//  PEEK_A,
+//  PEEK_S,
+//  PEEK_D
+//};
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // show the keycoad on the OLED
   if (record->event.pressed) {
     set_keylog(keycode, record);
   }
+
+  // new macros
+  switch(keycode) {
+  case MACRO_0:
+    if (record->event.pressed) {
+      register_code(KC_V);
+      register_code(KC_W);
+    } else {
+      unregister_code(KC_W);
+      unregister_code(KC_V);
+    }
+    break;
+  case MACRO_1:
+    if (record->event.pressed) {
+      register_code(KC_V);
+      register_code(KC_A);
+    } else {
+      unregister_code(KC_A);
+      unregister_code(KC_V);
+    }
+    break;
+  case MACRO_2:
+    if (record->event.pressed) {
+      register_code(KC_V);
+      register_code(KC_S);
+    } else {
+      unregister_code(KC_S);
+      unregister_code(KC_V);
+    }
+    break;
+  case MACRO_3:
+    if (record->event.pressed) {
+      register_code(KC_V);
+      register_code(KC_D);
+    } else {
+      unregister_code(KC_D);
+      unregister_code(KC_V);
+    }
+    break;
+  default:
+    break;
+  }
+
   return true;
 }
 #endif // OLED_ENABLE
