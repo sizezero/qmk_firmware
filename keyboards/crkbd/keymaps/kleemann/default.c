@@ -216,6 +216,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_NUM);
     }
     break;
+  case MACRO_5:
+    // simulate numlock 2 for wc3
+    if (record->event.pressed) {
+      register_code(KC_NUM);
+      register_code(KC_P2);
+    } else {
+      unregister_code(KC_P2);
+      unregister_code(KC_NUM);
+    }
+    break;
   default:
     break;
   }
