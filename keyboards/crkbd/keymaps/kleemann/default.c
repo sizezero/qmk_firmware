@@ -170,7 +170,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   // new macros
   switch(keycode) {
-  case MACRO_0:
+  case QK_MACRO_0:
     if (record->event.pressed) {
       register_code(KC_V);
       register_code(KC_W);
@@ -179,7 +179,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_V);
     }
     break;
-  case MACRO_1:
+  case QK_MACRO_1:
     if (record->event.pressed) {
       register_code(KC_V);
       register_code(KC_A);
@@ -188,7 +188,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_V);
     }
     break;
-  case MACRO_2:
+  case QK_MACRO_2:
     if (record->event.pressed) {
       register_code(KC_V);
       register_code(KC_S);
@@ -197,7 +197,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_V);
     }
     break;
-  case MACRO_3:
+  case QK_MACRO_3:
     if (record->event.pressed) {
       register_code(KC_V);
       register_code(KC_D);
@@ -206,7 +206,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_V);
     }
     break;
-  case MACRO_4:
+  case QK_MACRO_4:
     // simulate numlock 1 for wc3
     if (record->event.pressed) {
       register_code(KC_NUM);
@@ -216,7 +216,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       unregister_code(KC_NUM);
     }
     break;
-  case MACRO_5:
+  case QK_MACRO_5:
     // simulate numlock 2 for wc3
     if (record->event.pressed) {
       register_code(KC_NUM);

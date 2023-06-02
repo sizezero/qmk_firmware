@@ -120,6 +120,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // the above looks like useless crap
 // these are the only things added to kleemann
-#define IGNORE_MOD_TAP_INTERRUPT
-
 #define TAPPING_TERM 175
