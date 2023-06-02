@@ -1,39 +1,73 @@
 
-# Robert's dz60
+# QMK
 
-I've got a dz60 with a keymap and I'm using this branch of the QMK
+## Introduction
+
+Ever since I got a dz60 with a keymap and I'm using this branch of the QMK
 project to build and flash it onto my keyboard. It seems Windows and
-Mac users have a slick UI but linux is stuck on the command line. I
-tried the qmk command line app for a bit but it seemed a little
-mysterious. I think it's safer to have a local fork of the project,
-then I can tag working versions and update it when I feel like it.
+Mac users have a slick UI but linux is stuck on the command line.
 
-# QMK Configurator
+There are three components of QMK: the qmk source tree, the qmk
+configurator, the qmk command line application.
 
-This is the web interface that allows you to make keyboard layouts. I
-can't see a reason _not_ to use this. It produeces `.json` files but
-can also compile `.hex` files that are eventually flashed. It's good
-enough for me to create a `.json` file and then compile to `.hex`
-myself. Place the `.json` file here:
+## The QMK Source Tree
+
+This is just a clone of the official source tree. My clone has a
+branch named kleemann that has all of my customizations.
+
+When you get a new keyboard you generally find in within the
+`keyboards/` directory and then make a new directory within keymaps
+that has all of your customizations.
+
+E.g.: `~/qmk_configurator/keyboards/dz60/keymaps/kleemann/`
+
+### Building the Original Project
+
+Here are the orignal steps for cloning the project:
+
+    <clone qmk project in github>
+    git clone https://github.com/sizezero/qmk_firmware.git
+    git remote add upstream https://github.com/qmk/qmk_firmware.git
+    git remote -v
+    git branch kleemann
+    git checkout kleemann
+    git push -u origin kleemann
+
+### Updating Branch from Upstream
+
+From the github web page first go to the master and "sync fork" then
+go to the kleemann branch and "sync fork".
+
+## QMK Configurator
+
+This is an externally hosted web application that allows you to make
+keyboard layouts. I can't see a reason _not_ to use this. It produeces
+`.json` files but can also compile `.hex` files that are eventually
+flashed. It's good enough for me to create a `.json` file and then
+compile to `.hex` myself. Place the `.json` file here:
 
     keyboards/dz60/keymaps/kleemann/keymap.json
 
-# Dependencies
+## QMK Command Line Application
 
-The more recent builds of the source tree seem to need and external qmk program.
+Getting this working requires both a checked out copy of the qmk
+source tree and a separately compiled python application called
+qmk. The python program reads from the config file
+`~/.local/qmk/qmk.ini` in order to be associated with the source
+tree. Because of this, the source tree should not be too out of
+date. My source tree is `~/qmk_firmware_kleemann/`
 
-From the [full instructions](https://beta.docs.qmk.fm/tutorial/newbs_getting_started):
+    sudo apt install libhidapi-dev libhidapi-hidraw0 libhidapi-libusb0
+    sudo apt install python3-hidapi
 
-    sudo apt install -y git python3-pip
-    python3 -m pip install --user qmk
-    cd ~/bin
-    ln -s ../.local/bin/qmk qmk
+    mkdir python-qmk
+    python3 -m venv python-qmk
+    python-qmk/bin/python3 -m pip install qmk
+    ( cd bin ; ln -s ../pyhon-qmk/bin/qmk qmk )
 
-After upgrading ubuntu I had to rerun:
+# Keyboards
 
-    python3 -m pip install --user qmk
-
-# Building and Flashing
+## dz60
 
 Once:
 
@@ -57,7 +91,7 @@ Instead of the paper clip you could also use the reset button
 (middlespace + backspace + ESC) but I haven't tried that yet. I think
 you have to do the sequence before plugging the keyboard in.
 
-# KBD75
+## KBD75
 
 The build for the KBD75 is similar.
 
@@ -72,7 +106,7 @@ Then middle space + ESC. You should see `ATm32u4DFU` up in the dmesg output.
 
     make kbdfans/kbd75/rev2:kleemann:flash
 
-# Contra 40%
+## Contra 40%
 
 The Contra uses a Pro Micro or Sea Micro as the controller. This
 requires the caterina bootloader but this appears to be all setup in
@@ -108,7 +142,7 @@ to be recognized
 There is both a kleemann layout and a test layout. The test layout is
 simpler and good at verifying PCB connection and switches.
 
-# Corne Classic
+## Corne Classic
 
     make clean
     make crkbd/rev1:kleemann
@@ -120,19 +154,9 @@ included old default/keymaps.c minus the keymap and we're back to 96%
 Maybe this is due to the crazy oled and lighting stuff. First get it
 working, then play with all this crazy stuff.
 
-# Building the Original Project
+# Misc Notes
 
-Here are the orignal steps for cloning the project:
-
-    <clone qmk project in github>
-    git clone https://github.com/sizezero/qmk_firmware.git
-    git remote add upstream https://github.com/qmk/qmk_firmware.git
-    git remote -v
-    git branch kleemann
-    git checkout kleemann
-    git push -u origin kleemann
-
-# Home Row Mods
+## Home Row Mods
 
 There is a whole thing about doing [home row mods.](https://precondition.github.io/home-row-mods) The gist is that you set your home keys to mod tap keys so that long press acts like the mod and tap acts like the home row letter.
 
