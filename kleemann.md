@@ -65,6 +65,12 @@ date. My source tree is `~/qmk_firmware_kleemann/`
     python-qmk/bin/python3 -m pip install qmk
     ( cd bin ; ln -s ../pyhon-qmk/bin/qmk qmk )
 
+In order to flash with qmk the normal unix user needs permissions to
+access the USB device. See [these
+docs](https://docs.qmk.fm/#/faq_build?id=linux-udev-rules) which add a
+new set of rules to `/etc/udev/rules.d/` The most reliable way to put
+the new rules into effect is to just reboot the system.
+
 # Keyboards
 
 ## dz60
