@@ -45,8 +45,8 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   return rotation;
 }
 
-void render_keylock_status(uint8_t led_usb_state) {
-  if (led_usb_state & (1 << USB_LED_CAPS_LOCK)) {
+void render_keylock_status(led_t led_state) {
+  if (led_state.caps_lock) {
     oled_write_ln_P(PSTR("CAPS LOCK"), true);
   } else {
     oled_write_ln_P(PSTR(""), false);
@@ -160,7 +160,7 @@ bool oled_task_user(void) {
     } else {
       oled_clear(); // needed to wipe the alien logo
       oled_render_layer_state();
-      render_keylock_status(host_keyboard_leds());
+      render_keylock_status(host_keyboard_led_state());
       oled_render_keylog();
     }
   } else {
