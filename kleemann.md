@@ -36,7 +36,8 @@ Here are the orignal steps for cloning the project:
 ### Updating Branch from Upstream
 
 From the github web page first go to the master and "sync fork" then
-go to the kleemann branch and "sync fork".
+go to the kleemann branch and "sync fork". Local copies then need a
+"git pull"
 
 ## QMK Configurator
 
@@ -159,6 +160,43 @@ swaped keyboard.c with keyboard.json and it dropped to 83%. Ok,
 included old default/keymaps.c minus the keymap and we're back to 96%
 Maybe this is due to the crazy oled and lighting stuff. First get it
 working, then play with all this crazy stuff.
+
+## Aeroboard 70
+
+### One Time
+
+Double press the PCB button while the keyboard is plugged in. This is
+difficult so you may have to rest the PCB upside down with the edges
+on some books while the cable is close enough to the daughter
+board. The button is rediculously tiny so use some small, non-metal
+tool to actually press the button. If you do this correctly, a USB
+drive will conntect to your computer.
+
+To flash the drive, simply copy a `.uf2` file to the drive. It will
+flash and restart.
+
+The files you copy onto the drive do not appear to actually show up in
+future reads of the drive's contents. If you read from the USB drive,
+you will always see the original flashed contents.
+
+If you add
+
+    BOOTMAGIC_ENABLE = yes
+
+to `rules.mk`, you will be able to bring up the USB drive for flashing
+on a normal `QK_BOOT` (Reset) keycode without having to open up the
+keyboard and double press the PCB.
+
+### Regular Build
+
+    make clean
+    make eason/aeroboard:default
+    make eason/aeroboard:kleemann
+
+Press reset to bring up the USB drive.
+
+Copy the compiled `.uf2` file in the QMK root directory to the flash
+drive.
 
 # Misc Notes
 
