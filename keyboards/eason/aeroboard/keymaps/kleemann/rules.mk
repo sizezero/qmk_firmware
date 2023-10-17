@@ -3,3 +3,5 @@
 #
 
 BOOTMAGIC_ENABLE = yes
+
+SRC += stuff.c
