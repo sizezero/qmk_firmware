@@ -1,6 +1,7 @@
 #pragma once
 
-#include "config_common.h"
+// RSK: it looks like QMK no longer requires this
+//#include "config_common.h"
 
 
 // /* USB Device descriptor parameter */
