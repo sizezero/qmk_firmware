@@ -39,6 +39,12 @@ From the github web page first go to the master and "sync fork" then
 go to the kleemann branch and "sync fork". Local copies then need a
 "git pull"
 
+June 2024: I tried this but when I tried to "sync fork" kleemann from
+the web site it said I either had to loose over 10 commits from
+kleemann, open a pull request, or resolve merge problems from the
+command line. I'm currently working on flashing Sean a new version of
+JRIS so I'm going to wait before investigating this.
+
 ## QMK Configurator
 
 This is an externally hosted web application that allows you to make
@@ -234,4 +240,9 @@ To test this, first try long strings of lower case letters then practice on text
 
 ### 2
 
-I was bugged that holding down a LT for a while and then releasing it acted as a keypress. It turns out that I had enabled this annoying behavior with  RETRO_TAPPING. I got rid of it.
+I was bugged that holding down a LT for a while and then releasing it acted as a keypress. It turns out that I had enabled this annoying behavior with RETRO_TAPPING. I got rid of it.
+
+### 3
+
+IGNORE_MOD_TAP_INTERRUPT is now enabled by default in QMK so no
+defines are required in order to use tap hold correctly.
