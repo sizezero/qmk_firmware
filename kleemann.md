@@ -27,7 +27,10 @@ Here are the orignal steps for cloning the project:
 
     <clone qmk project in github>
     git clone https://github.com/sizezero/qmk_firmware.git
+    
+    I don't think the next command is necessary. Everything is done from the sizezero repo.
     git remote add upstream https://github.com/qmk/qmk_firmware.git
+    
     git remote -v
     git branch kleemann
     git checkout kleemann
@@ -40,10 +43,20 @@ go to the kleemann branch and "sync fork". Local copies then need a
 "git pull"
 
 June 2024: I tried this but when I tried to "sync fork" kleemann from
-the web site it said I either had to loose over 10 commits from
+the web site it said I either had to lose over 10 commits from
 kleemann, open a pull request, or resolve merge problems from the
 command line. I'm currently working on flashing Sean a new version of
 JRIS so I'm going to wait before investigating this.
+
+I ended up doing a git merge from the command line. The new strategy is:
+
+    <from github "sync fork" on master>
+    <from local, checked out branch: kleemann, jris, other>
+    git fetch
+    git merge master
+
+The above didn't seem to work. I had to do a "sync fork" of jris65
+from the web site.
 
 ## QMK Configurator
 
