@@ -217,6 +217,17 @@ Press reset to bring up the USB drive.
 Copy the compiled `.uf2` file in the QMK root directory to the flash
 drive.
 
+# Reviung 41
+
+    make clean
+    make reviung/reviung41:default
+    make reviung/reviung41:kleemann
+
+Press reset to bring up the USB drive.
+
+Copy the compiled `.uf2` file in the QMK root directory to the flash
+drive.
+
 # Misc Notes
 
 ## Home Row Mods
