@@ -223,7 +223,7 @@ drive.
     make reviung/reviung41:default
     make reviung/reviung41:kleemann
 
-Press reset to bring up the USB drive.
+Long press the reset button to bring up the USB drive.
 
 Copy the compiled `.uf2` file in the QMK root directory to the flash
 drive.
