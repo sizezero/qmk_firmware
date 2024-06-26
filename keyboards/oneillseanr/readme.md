@@ -3,3 +3,5 @@
 Sean is a keyboard hobbyist who prototypes keyboards for personal use.
 
 **Website:** https://www.seanswebsite.com/
+
+TODO: add actual contact info
