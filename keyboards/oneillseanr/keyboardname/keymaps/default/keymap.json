@@ -1,0 +1,15 @@
+{
+    "keyboard": "oneillseanr/keyboardname",
+    "keymap": "default",
+    "layout": "LAYOUT",
+    "layers": [
+                [
+                    "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A",
+                    "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A",
+                    "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A",
+                    "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A",
+                    "KC_A", "KC_A", "KC_A"
+                ]
+                    
+    ]
+}
