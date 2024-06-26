@@ -1,7 +1,7 @@
-# Sean R. O'neill
+# A-Okay!
 
-Sean is a keyboard hobbyist who prototypes keyboards for personal use.
+A-Okay! makes mechanical keyboards.
 
 **Website:** https://www.seanswebsite.com/
 
-TODO: add actual contact info
+TODO: add actual website and  contact info

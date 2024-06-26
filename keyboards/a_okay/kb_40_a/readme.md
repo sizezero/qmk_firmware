@@ -1,8 +1,6 @@
-# keyboardname
+# KB-40-A
 
-TODO: add the name of the keyboard above
-
-TODO: link to an image of the keyboard 
+TODO: link to an image of the keyboard (QMK prefers files in imagur
 
 ![hotswap](https://i.imgur.com/kJzebgd.jpeg)
 **Hotswap PCB**
