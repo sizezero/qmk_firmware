@@ -1,7 +1,7 @@
 {
-    "keyboard": "oneillseanr/keyboardname",
+    "keyboard": "aokay/kb40a",
     "keymap": "default",
-    "layout": "LAYOUT",
+    "layout": "LAYOUT_all",
     "layers": [
                 [
                     "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A", "KC_A",
