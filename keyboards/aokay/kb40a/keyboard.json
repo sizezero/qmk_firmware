@@ -18,8 +18,8 @@
     "url": "",
     "usb": {
         "device_version": "0.1.0",
-        "pid": "0x4953",
-        "vid": "0x5A4C"
+        "pid": "0x414F",
+        "vid": "0x1001"
     },
     "layouts": {
         "LAYOUT_all": {
