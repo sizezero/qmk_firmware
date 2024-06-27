@@ -21,7 +21,6 @@
         "pid": "0x4953",
         "vid": "0x5A4C"
     },
-    "community_layouts": ["3u_275u_1u_225u_3u", "3u_275u_1u_225u_15u_15u", "15u_15u_275u_1u_225u_3u", "15u_15u_275u_1u_225u_15u_15u"],
     "layouts": {
         "LAYOUT_all": {
             "layout": [
