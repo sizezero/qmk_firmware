@@ -1,13 +1,10 @@
 # KB-40-A
 
-TODO: link to an image of the keyboard (QMK prefers files in imgur
+![KB-40-A illustration](https://i.imgur.com/x8FNkei.png)
 
-![hotswap](https://i.imgur.com/kJzebgd.jpeg)
-**Hotswap PCB**
+A compact, staggered, 40% (4x12) keyboard. More info at [TODO](TODO)
 
-A 40% keyboard.
-
-* Keyboard Maintainer: [Sean R. O'neill](TODO: Sean's github repo https://github.com/qmk)
+* Keyboard Maintainer: [Sean O'Neill](https://github.com/billowybrimstone)
 * Hardware Supported: TODO
 * Hardware Availability: TODO
 
