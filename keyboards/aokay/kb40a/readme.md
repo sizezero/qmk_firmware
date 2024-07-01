@@ -2,11 +2,15 @@
 
 ![KB-40-A illustration](https://i.imgur.com/x8FNkei.png)
 
+## Description
+
 A compact, staggered, 40% (4x12) keyboard. More info at [TODO](TODO)
 
 * Keyboard Maintainer: [Sean O'Neill](https://github.com/billowybrimstone)
 * Hardware Supported: TODO
 * Hardware Availability: TODO
+
+## Setup
 
 Make example for this keyboard (after setting up your build environment):
 
