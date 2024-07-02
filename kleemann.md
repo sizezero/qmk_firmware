@@ -228,6 +228,16 @@ Long press the reset button to bring up the USB drive.
 Copy the compiled `.uf2` file in the QMK root directory to the flash
 drive.
 
+# Corchim
+
+This is a corne in a nice case.
+
+    make clean
+    make crkbd/rev1:kleemann_corchim
+    make crkbd/rev1:kleemann_corchim:flash
+
+TODO reset instructions
+
 # Misc Notes
 
 ## Home Row Mods
