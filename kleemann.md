@@ -236,7 +236,8 @@ This is a corne in a nice case.
     make crkbd/rev1:kleemann_corchim
     make crkbd/rev1:kleemann_corchim:flash
 
-TODO reset instructions
+It seems that in order to bring up a USB drive to copy to, the reset
+button has to be double tapped.
 
 # Misc Notes
 
