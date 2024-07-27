@@ -4,9 +4,9 @@
 
 ## Description
 
-A compact, staggered, 40% (4x12) keyboard. More info at [TODO](TODO)
+A compact, staggered, 40% (4x12) keyboard.
 
-* Keyboard Maintainer: [Sean O'Neill](https://github.com/billowybrimstone)
+* Keyboard Maintainer: [Sean O'Neill](https://github.com/oneillseanm)
 * Hardware Supported: TODO
 * Hardware Availability: TODO
 
@@ -24,11 +24,7 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 
 ## Bootloader
 
-TODO: rewrite this when we figure out how the bootloader works.
+Enter the bootloader in two ways:
 
-Enter the bootloader in 3 ways:
-
-* **Keycode in layout**: Using the default firmware, assign a key to Reset (`QK_BOOT`) and press the assigned key.
-* **Physical reset button**: Briefly press the button on the back of the PCB
-
-The QMK default keymap has FN+Backspace assigned to `QK_BOOT` so you can use that key sequence for subsequent flashing.
+* **Keycode in layout**: Using the default firmware, press `FN+Backspace` which is assigned to `QK_BOOT`.
+* **Physical reset button**: Briefly press the button on the front of the PCB
