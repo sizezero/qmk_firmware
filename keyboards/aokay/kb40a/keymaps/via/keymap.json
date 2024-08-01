@@ -1,12 +1,12 @@
 {
     "version": 1,
     "config": {
+        "dynamic_keymap": {
+            "layer_count": 6
+        },
         "features": {
             "via": true
         }
-    },
-    "dynamic_keymap": {
-        "layer_count": 4
     },
     "keyboard": "aokay/kb40a",
     "keymap": "via",
