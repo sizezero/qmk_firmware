@@ -23,47 +23,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // when the keyboard is plugged in, the caps lock toggle may be out of sync with the computer
 // re-sync it
 void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
-  dprint("sync_caps_lock()\n");
-  if (KC_LCAP == keycode_at_keymap_location(layer_num, row, column)) {
-    dprintf("KC_LCAP in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
-    led_t led_state = host_keyboard_led_state();
-    if (led_state.caps_lock) {
-      dprint("caps lock on\n");
-      if (matrix_is_on(row, column)) {
-        // caps lock is on and toggle key is on so do nothing
-      } else {
-        // caps lock is on and toggle key is not depressed
-        dprint("toggling caps lock\n");
-        // programmatically send a keycode that toggle caps lock on
-        tap_code(KC_CAPS_LOCK);
-      }
-    } else { // caps lock state is off
-      dprint("caps lock off\n");
-      if (matrix_is_on(row, column)) {
-        // caps lock is off and toggle key is on
-        dprint("toggling caps lock\n");
-        // programmatically send a keycode that toggle caps lock on
-        tap_code(KC_CAPS_LOCK);
-      } else {
-        // caps lock is off and toggle key is off so do nothing
-      }
+    dprint("sync_caps_lock()\n");
+    if (KC_LCAP == keycode_at_keymap_location(layer_num, row, column)) {
+        dprintf("KC_LCAP in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
+        led_t led_state = host_keyboard_led_state();
+        if (led_state.caps_lock) {
+            dprint("caps lock on\n");
+            if (matrix_is_on(row, column)) {
+                // caps lock is on and toggle key is on so do nothing
+            } else {
+                // caps lock is on and toggle key is not depressed
+                dprint("toggling caps lock\n");
+                // programmatically send a keycode that toggle caps lock on
+                tap_code(KC_CAPS_LOCK);
+            }
+        } else { // caps lock state is off
+            dprint("caps lock off\n");
+            if (matrix_is_on(row, column)) {
+                // caps lock is off and toggle key is on
+                dprint("toggling caps lock\n");
+                // programmatically send a keycode that toggle caps lock on
+                tap_code(KC_CAPS_LOCK);
+            } else {
+                // caps lock is off and toggle key is off so do nothing
+            }
+        }
+    } else {
+        dprintf("KC_LCAP NOT in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
     }
-  } else {
-    dprintf("KC_LCAP NOT in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
-  }
 }
 
 uint32_t my_callback(uint32_t trigger_time, void *cb_arg) {
-  sync_caps_lock(0, 4, 10);
-  sync_caps_lock(0, 4, 11);
-  return 0; // don't repeat this callback
+    sync_caps_lock(0, 4, 10);
+    sync_caps_lock(0, 4, 11);
+    return 0; // don't repeat this callback
 }
 
 // leftmost toggle key is at matrix (4,10)
 void keyboard_post_init_kb(void) {
-  keyboard_post_init_user();
-  //debug_enable = true;
-  //debug_matrix = true;
-  //debug_keyboard = true;
-  defer_exec(2000, my_callback, NULL);
+    keyboard_post_init_user();
+    // debug_enable = true;
+    // debug_matrix = true;
+    // debug_keyboard = true;
+    defer_exec(2000, my_callback, NULL);
 }
