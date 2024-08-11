@@ -6,7 +6,11 @@
 
 A compact, staggered, 40% (4x12) keyboard.
 
+<<<<<<< Updated upstream
 * Keyboard Maintainer: [Sean O'Neill](https://github.com/oneillseanm)
+=======
+* Keyboard Maintainer: [Sean O'Neill](TODO: Sean's github repo https://github.com/qmk)
+>>>>>>> Stashed changes
 * Hardware Supported: TODO
 * Hardware Availability: TODO
 
