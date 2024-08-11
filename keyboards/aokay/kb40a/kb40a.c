@@ -53,9 +53,28 @@ void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
     }
 }
 
+// when the keyboard is plugged in, the layer toggle switch may be out of sync with the default layer
+// re-sync it
+void sync_toggle_layer_2(uint8_t layer_num, uint8_t row, uint8_t column) {
+    dprint("sync_toggle layer()\n");
+    if (IS_QK_TOGGLE_LAYER(keycode_at_keymap_location(layer_num, row, column))) {
+        dprintf("TG() in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
+        if (matrix_is_on(row, column)) {
+           // switch is depressed, toggle our layer to 2
+           dprint("toggling TG(2)\n");
+           // programmatically send a keycode that toggles layer 2
+           layer_invert(2);
+        }
+    } else {
+        dprintf("TG() is NOT in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
+    }
+}
+
 uint32_t my_callback(uint32_t trigger_time, void *cb_arg) {
     sync_caps_lock(0, 4, 10);
     sync_caps_lock(0, 4, 11);
+    // TODO: this only works if the TG(2) is set to sw45down
+    sync_toggle_layer_2(0, 4, 11);
     return 0; // don't repeat this callback
 }
 
