@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quantum.h"
 #include "keymap_introspection.h"
 #include "print.h"
-#include "deferred_exec.h"
 
 // when the keyboard is plugged in, the caps lock toggle may be out of sync with the computer
 // re-sync it
@@ -70,19 +69,3 @@ void sync_toggle_layer_2(uint8_t layer_num, uint8_t row, uint8_t column) {
     }
 }
 
-uint32_t my_callback(uint32_t trigger_time, void *cb_arg) {
-    sync_caps_lock(0, 4, 10);
-    sync_caps_lock(0, 4, 11);
-    // TODO: this only works if the TG(2) is set to sw45down
-    sync_toggle_layer_2(0, 4, 11);
-    return 0; // don't repeat this callback
-}
-
-// leftmost toggle key is at matrix (4,10)
-void keyboard_post_init_kb(void) {
-    keyboard_post_init_user();
-    // debug_enable = true;
-    // debug_matrix = true;
-    // debug_keyboard = true;
-    defer_exec(2000, my_callback, NULL);
-}
