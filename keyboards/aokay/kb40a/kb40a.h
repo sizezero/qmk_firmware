@@ -17,4 +17,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column);
 
-void sync_toggle_layer_2(uint8_t layer_num, uint8_t row, uint8_t column);
+void sync_toggle_layer(uint8_t layer_num, uint8_t row, uint8_t column, uint8_t layer_num_to_toggle);

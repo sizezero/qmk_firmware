@@ -24,8 +24,9 @@ uint32_t my_callback(uint32_t trigger_time, void *cb_arg) {
     // if the leftmost toggle key is set to caps lock, then make sure it is in sync
     // with our caps lock state
     sync_caps_lock(0, 4, 10);
-    // if the rightmost toggle key is 
-    sync_toggle_layer_2(0, 4, 11);
+    // if the rightmost toggle key depressed and is set to TG(), then toggle to
+    // layer 2
+    sync_toggle_layer(0, 4, 11, 2);
 
     // If the toggle keys are mapped to different values the above code will not
     // cause any problems (the calls will do nothing) however you may want to write
