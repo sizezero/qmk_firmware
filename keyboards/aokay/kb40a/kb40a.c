@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keymap_introspection.h"
 #include "print.h"
 
+#include "kb40a.h"
+
 // when the keyboard is plugged in, the caps lock toggle may be out of sync with the computer
 // re-sync it
 void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
@@ -29,7 +31,7 @@ void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
         if (led_state.caps_lock) {
             dprint("caps lock on\n");
             if (matrix_is_on(row, column)) {
-                // caps lock is on and toggle key is on so do nothing
+                // caps lock is on and toggle key is depressed so do nothing
             } else {
                 // caps lock is on and toggle key is not depressed
                 dprint("toggling caps lock\n");
@@ -39,12 +41,12 @@ void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
         } else { // caps lock state is off
             dprint("caps lock off\n");
             if (matrix_is_on(row, column)) {
-                // caps lock is off and toggle key is on
+                // caps lock is off and toggle key is depressed
                 dprint("toggling caps lock\n");
                 // programmatically send a keycode that toggle caps lock on
                 tap_code(KC_CAPS_LOCK);
             } else {
-                // caps lock is off and toggle key is off so do nothing
+                // caps lock is off and toggle key is not depressed so do nothing
             }
         }
     } else {
@@ -61,7 +63,7 @@ void sync_toggle_layer(uint8_t layer_num, uint8_t row, uint8_t column, uint8_t l
         if (matrix_is_on(row, column)) {
            // switch is depressed, toggle our layer to the indicated layer
            dprintf("toggling TG(%d)\n", layer_num_to_toggle);
-           // programmatically send a keycode that toggles to the target layer
+           // programmatically toggle to the target layer
            layer_invert(layer_num_to_toggle);
         }
     } else {
