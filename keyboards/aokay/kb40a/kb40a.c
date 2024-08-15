@@ -33,7 +33,7 @@ void sync_caps_lock(uint8_t layer_num, uint8_t row, uint8_t column) {
             } else {
                 // caps lock is on and toggle key is not depressed
                 dprint("toggling caps lock\n");
-                // programmatically send a keycode that toggle caps lock on
+                // programmatically send a keycode that toggle caps lock off
                 tap_code(KC_CAPS_LOCK);
             }
         } else { // caps lock state is off
@@ -59,9 +59,9 @@ void sync_toggle_layer(uint8_t layer_num, uint8_t row, uint8_t column, uint8_t l
     if (IS_QK_TOGGLE_LAYER(keycode_at_keymap_location(layer_num, row, column))) {
         dprintf("TG() in layout at layer:%d row:%d column:%d\n", layer_num, row, column);
         if (matrix_is_on(row, column)) {
-           // switch is depressed, toggle our layer to 2
-           dprint("toggling TG(2)\n");
-           // programmatically send a keycode that toggles layer 2
+           // switch is depressed, toggle our layer to the indicated layer
+           dprintf("toggling TG(%d)\n", layer_num_to_toggle);
+           // programmatically send a keycode that toggles to the target layer
            layer_invert(layer_num_to_toggle);
         }
     } else {
