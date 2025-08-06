@@ -15,7 +15,23 @@
                         "UG_TOGG", "UG_NEXT", "UG_HUEU", "UG_HUED", "UG_SATU", "UG_SATD", "UG_VALU", "UG_VALD", "KC_PGUP", "KC_UP", "KC_PGDN"
                         "KC_TRNS", "KC_TRNS", "KC_TRNS", "KC_DEL", "KC_TRNS", "KC_BSPC", "KC_LEFT", "KC_DOWN", "KC_RGHT"
                 ]
-    ]
+    ],
+    "config": {
+      "features": {
+         "encoder_map": true
+      }
+   },
+   "encoders": [
+      [
+          { "ccw": "KC_VOLD", "cw": "KC_VOLU" },
+          { "ccw": "KC_PGUP", "cw": "KC_PGDN" }
+      ],
+      [
+          { "ccw": "KC_TRNS", "cw": "KC_TRNS" },
+          { "ccw": "KC_TRNS", "cw": "KC_TRNS" }
+      ]
+   ]
+
 }
 
 
