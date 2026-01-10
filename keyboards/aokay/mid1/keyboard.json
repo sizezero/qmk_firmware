@@ -1,6 +1,6 @@
 {
     "manufacturer": "A-Okay!",
-    "keyboard_name": "MID-1",
+    "keyboard_name": "MID.1",
     "maintainer": "sizezero",
     "bootloader": "atmel-dfu",
     "diode_direction": "COL2ROW",
