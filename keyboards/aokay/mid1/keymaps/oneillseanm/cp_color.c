@@ -18,7 +18,7 @@
  * -------------------------------------------------------------------------- */
 
 #include QMK_KEYBOARD_H
-#include "mid1_config.h"
+#include "config.h"
 #include "cp_color.h"
 #include "mid1_custom_keycodes.h"
 #include "eeconfig.h"

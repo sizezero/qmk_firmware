@@ -13,7 +13,7 @@
 #include QMK_KEYBOARD_H
 #include "keymap_defines.h"
 #include "mid1_custom_keycodes.h"
-#include "mid1_config.h"
+#include "config.h"
 #include "cp_color.h"
 
 /* -------------------------------------------------------------------------

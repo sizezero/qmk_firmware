@@ -9,6 +9,14 @@
 
 #pragma once
 
+/* do not include unneeded animations */
+#undef RGBLIGHT_EFFECT_SNAKE
+#undef RGBLIGHT_EFFECT_CHRISTMAS
+#undef RGBLIGHT_EFFECT_STATIC_GRADIENT
+#undef RGBLIGHT_EFFECT_RGB_TEST
+#undef RGBLIGHT_EFFECT_ALTERNATING
+#undef RGBLIGHT_EFFECT_TWINKLE
+
 /* -- RGB global defaults -------------------------------------------------- */
 #define RGBLIGHT_DEFAULT_HUE    15
 #define RGBLIGHT_DEFAULT_SAT    255
