@@ -21,8 +21,11 @@
  * ------------------------------------------------------------------------- */
 
 /* -- Config (tweak if needed) --------------------------------------------- */
-#define POMO_LED_FIRST         0     /* index of the first of the 6 LEDs used by the Pomodoro bar */
-#define POMO_LED_COUNT         6     /* must be 6 */
+#define CP_NUM_STYLE_TARGETS (CP_NUM_LAYERS + 1)  // +1 for caps
+#define EE_UNINIT_BYTE 0xFF
+#define LED_ALL_MASK ((uint8_t)((1u << POMO_LED_COUNT) - 1u))
+#define POMO_LED_FIRST         0     /* index of the first of the 8 LEDs used by the Pomodoro bar */
+#define POMO_LED_COUNT         8     /* physical LED count */
 #define POMO_DEFAULT_WORK_MIN  20    /* default work minutes at power-on */
 #define POMO_DEFAULT_BREAK_MIN 10    /* default break minutes at power-on */
 #define POMO_PREVIEW_MS        2000  /* preview-window duration when adjusting with timer OFF */
@@ -104,50 +107,51 @@ static preview_kind_t preview_kind    = PV_NONE;
 static uint32_t       preview_until   = 0;
 static bool           preview_blinked = false; /* blocks repeat double-blink during window */
 
-/* -- LED pattern map (6 LEDs) --------------------------------------------- */
-/* Index 0..11 covering these ranges (minutes remaining):
- * 0:  1..0  -> IOOOOI
- * 1:  5..0  -> IOOOOO
- * 2: 10..5  -> IIOOOO
- * 3: 15..10 -> IIIOOO
- * 4: 20..15 -> IIIIOO
- * 5: 25..20 -> IIIIIO
- * 6: 30..25 -> IIIIII
- * 7: 35..30 -> OIIIII
- * 8: 40..35 -> OOIIII
- * 9: 45..40 -> OOOIII
- * 10:50..45 -> OOOOII
- * 11:55..50 -> OOOOOI
- * Not used: OOOOOO
+/* -- LED pattern map (8 LEDs) -------------------------------------------- */
+/* Index 0..15 covering these ranges (minutes remaining):
+ * 0:  1..0   -> IOOOOOOI
+ * 1:  5..0   -> IOOOOOOO
+ * 2: 10..5   -> IIOOOOOI
+ * 3: 15..10  -> IIIOOOOI
+ * 4: 20..15  -> IIIIOOOI
+ * 5: 25..20  -> IIIIIOOI
+ * 6: 30..25  -> IIIIIIOI
+ * 7: 35..30  -> IIIIIIIO
+ * 8: 40..35  -> IIIIIIII
+ * 9: 45..40  -> OIIIIIII
+ * 10:50..45  -> OOIIIIII
+ * 11:55..50  -> OOOIIIII
+ * 12:60..55  -> OOOOIIII
+ * 13:65..60  -> OOOOOIII
+ * 14:70..65  -> OOOOOOII
+ * 15:75..70  -> OOOOOOOI
  *
- * Encoded as bits b5..b0 (LED index 0 is leftmost shown first in comments).
+ * Encoded as bits b7..b0 (LED index 0 is leftmost shown first).
  */
-static const uint8_t PATS[12] = {
-    0b100001, /* IOOOOI */
-    0b100000, /* IOOOOO */
-    0b110000, /* IIOOOO */
-    0b111000, /* IIIOOO */
-    0b111100, /* IIIIOO */
-    0b111110, /* IIIIIO */
-    0b111111, /* IIIIII */
-    0b011111, /* OIIIII */
-    0b001111, /* OOIIII */
-    0b000111, /* OOOIII */
-    0b000011, /* OOOOII */
-    0b000001  /* OOOOOI */
+static const uint8_t PATS[16] = {
+    0b10000001, /* 0:  1 min  -> IOOOOOOI  (special) */
+    0b10000000, /* 1:  5 min  -> IOOOOOOO */
+    0b11000000, /* 2: 10 min  -> IIOOOOOI */
+    0b11100000, /* 3: 15 min  -> IIIOOOOI */
+    0b11110000, /* 4: 20 min  -> IIIIOOOI */
+    0b11111000, /* 5: 25 min  -> IIIIIOOI */
+    0b11111100, /* 6: 30 min  -> IIIIIIOI */
+    0b11111110, /* 7: 35 min  -> IIIIIIIO */
+    0b11111111, /* 8: 40 min  -> IIIIIIII */
+    0b01111111, /* 9: 45 min  -> OIIIIIII */
+    0b00111111, /* 10:50 min  -> OOIIIIII */
+    0b00011111, /* 11:55 min  -> OOOIIIII */
+    0b00001111, /* 12:60 min  -> OOOOIIII */
+    0b00000111, /* 13:65 min  -> OOOOOIII */
+    0b00000011, /* 14:70 min  -> OOOOOOII */
+    0b00000001  /* 15:75 min  -> OOOOOOOI */
 };
 
-/* -- Minute helpers ------------------------------------------------------- */
-static uint8_t clamp_5_to_55(uint8_t m) {
-    if (m < 5)  return 5;
-    if (m > 55) return 55;
-    return m;
-}
 
-/* 1-minute support for OFF-state adjustments */
-static uint8_t clamp_1_to_55(uint8_t m) {
+/* -- Minute helpers ------------------------------------------------------- */
+static uint8_t clamp_1_to_75(uint8_t m) {
     if (m < 1)  return 1;
-    if (m > 55) return 55;
+    if (m > 75) return 75;
     return m;
 }
 static uint8_t minus5_or_to1(uint8_t m) {
@@ -156,7 +160,7 @@ static uint8_t minus5_or_to1(uint8_t m) {
 static uint8_t plus5_from1(uint8_t m) {
     if (m == 1) return 5;
     uint8_t nxt = (uint8_t)(m + 5);
-    return nxt > 55 ? 55 : nxt;
+    return nxt > 75 ? 75 : nxt;
 }
 
 /* -- Start animation (sweep) ---------------------------------------------- */
@@ -171,14 +175,14 @@ static bool     sweep_completed    = false; /* has the start sweep already run t
 static void boot_anim_load_config(void) {
 #ifdef EE_CP_BOOT_ANIM_ENABLED
     /* Read raw byte from EEPROM.
-     *  - 0xFF means 'uninitialized' (fresh EEPROM).
+     *  - LED_ALL_MASK means 'uninitialized' (fresh EEPROM).
      *  - 0 means disabled.
      *  - non-zero means enabled.
      */
     uint8_t raw = eeprom_read_byte((void *)EE_CP_BOOT_ANIM_ENABLED);
 
-    if (raw == 0xFF) {
-        /* First time: default ON and write it back so it's no longer 0xFF */
+    if (raw == EE_UNINIT_BYTE) {
+        /* First time: default ON and write it back so it's no longer LED_ALL_MASK */
         cp_boot_anim_enabled = true;
         eeprom_update_byte((void *)EE_CP_BOOT_ANIM_ENABLED, 1);
     } else {
@@ -207,7 +211,7 @@ static uint32_t step_down_ms(uint32_t ms_left) {
 static uint32_t step_up_ms(uint32_t ms_left) {
     uint32_t m   = ms_left / 60000u;  /* floor minutes */
     uint32_t rem = ms_left % 60000u;
-    if (m >= 55) return 55 * 60000u;
+    if (m >= 75) return 75 * 60000u;
     if (rem == 0) {
         /* exact boundary: go up one bucket */
         return (uint32_t)(m + 5) * 60000u;
@@ -215,7 +219,7 @@ static uint32_t step_up_ms(uint32_t ms_left) {
         /* snap to upper bucket */
         uint8_t up = (uint8_t)(((m + 5) / 5) * 5);
         if (up < 5) up = 5;
-        if (up > 55) up = 55;
+        if (up > 75) up = 75;
         return (uint32_t)up * 60000u;
     }
 }
@@ -227,18 +231,17 @@ static inline uint8_t minutes_ceil_from_ms(uint32_t ms_left) {
     return (uint8_t)m;
 }
 static inline uint8_t pattern_index_from_minutes(uint8_t m) {
-    if (m <= 1)  return 0;   /* 1..0  -> IOOOOI */
-    if (m <= 5)  return 1;   /* 5..0  -> IOOOOO */
-    if (m <= 10) return 2;   /* 10..5 -> IIOOOO */
-    if (m <= 15) return 3;
-    if (m <= 20) return 4;
-    if (m <= 25) return 5;
-    if (m <= 30) return 6;
-    if (m <= 35) return 7;
-    if (m <= 40) return 8;
-    if (m <= 45) return 9;
-    if (m <= 50) return 10;
-    return 11;               /* 55..50 -> OOOOOI */
+    /* 0: 1-minute special
+     * 1..15: 5-minute buckets up to 75
+     */
+    if (m <= 1) return 0;
+    if (m > 75) m = 75;
+
+    /* Ceil to nearest 5: 2..5->1, 6..10->2, ... 71..75->15 */
+    uint8_t bucket = (uint8_t)((m + 4) / 5);
+    if (bucket < 1)  bucket = 1;
+    if (bucket > 15) bucket = 15;
+    return bucket;
 }
 static uint32_t __attribute__((unused)) ms_from_setting(uint8_t minutes) {
     return (uint32_t)minutes * 60000u;
@@ -255,7 +258,7 @@ static inline uint16_t pulse_period_for_min(uint8_t m) {
 }
 
 /* -- Helper prototypes ---------------------------------------------------- */
-static void set_led_6_mask(uint8_t mask, HSV_t hsv);
+static void set_led_mask(uint8_t mask, HSV_t hsv);
 
 #if 1
 /* -- Breathing tip -------------------------------------------------------- */
@@ -318,12 +321,12 @@ static void run_subtle_tip_pulse(uint8_t mask, HSV_t base_hsv) {
     HSV_t h = base_hsv;
     h.v = v;
 
-    set_led_6_mask(mask, h); /* unchanged: use your existing mask */
+    set_led_mask(mask, h); /* unchanged: use your existing mask */
 }
 
 /* -- Rendering helpers ---------------------------------------------------- */
 
-static void set_led_6_mask(uint8_t mask, HSV_t hsv) {
+static void set_led_mask(uint8_t mask, HSV_t hsv) {
     for (uint8_t i = 0; i < POMO_LED_COUNT; i++) {
         uint8_t bit_index = POMO_LEDS_REVERSED ? i : (POMO_LED_COUNT - 1 - i);
         uint8_t on        = (mask >> bit_index) & 0x1;
@@ -351,7 +354,7 @@ static void run_blink(uint32_t total_ms, uint8_t cycles, uint8_t mask, HSV_t hsv
 
     HSV_t h = hsv;
     h.v = high ? vhi : vlo;
-    set_led_6_mask(mask, h);
+    set_led_mask(mask, h);
 }
 
 /* Breathing under 5 minutes (minute-based ramp) */
@@ -378,7 +381,7 @@ static void run_pulse(uint8_t minute_bucket, uint8_t mask, HSV_t hsv) {
     uint8_t v      = (uint8_t)(v_lo + ((uint16_t)(v_hi - v_lo) * tri_pct) / 100);
 
     HSV_t h = hsv; h.v = v;
-    set_led_6_mask(mask, h);
+    set_led_mask(mask, h);
 }
 
 /* Simple 6-LED rainbow wave for POMO_RAINBOW */
@@ -417,8 +420,8 @@ static inline bool visual_lock_active(void);
 
 /* -- Period control ------------------------------------------------------- */
 static void start_period(pomo_state_t next, uint8_t minutes) {
-    /* Clamp minutes to 1–55 for safety */
-    minutes = clamp_1_to_55(minutes);
+    /* Clamp minutes to 1–75 for safety */
+    minutes = clamp_1_to_75(minutes);
 
     /* Set state */
     pstate = next;
@@ -708,7 +711,7 @@ void housekeeping_task_user(void) {
                 run_blink(POMO_DOUBLE_BLINK_MS, 2, mask, hsv);
                 if (anim_gate) preview_blinked = true;
             } else {
-                set_led_6_mask(mask, hsv);
+                set_led_mask(mask, hsv);
             }
             if (expired) {
                 preview_kind    = PV_NONE;
@@ -720,7 +723,7 @@ void housekeeping_task_user(void) {
         /* Idle OFF — only paint if mode is STATIC; otherwise let rgblight animate */
         if (rgblight_get_mode() == RGBLIGHT_MODE_STATIC_LIGHT) {
             HSV_t layer = work_color_from_layer();
-            set_led_6_mask(0b111111, layer);
+            set_led_mask(LED_ALL_MASK, layer);
         }
         return;
     }
@@ -752,7 +755,7 @@ void housekeeping_task_user(void) {
     /* Handle the start sweep (fills LED bar once at start) */
     if (in_start_sweep) {
         HSV_t sweep_hsv = work_color_from_layer();
-        set_led_6_mask(PATS[sweep_current], sweep_hsv);
+        set_led_mask(PATS[sweep_current], sweep_hsv);
 
         uint32_t elapsed = timer_elapsed32(sweep_started_at);
         uint32_t step    = elapsed / POMO_SWEEP_STEP_MS;
@@ -824,7 +827,7 @@ void housekeeping_task_user(void) {
         run_pulse(m, mask, hsv);
     } else {
         /* Draw the progress bar */
-        set_led_6_mask(mask, hsv);
+        set_led_mask(mask, hsv);
         /* Subtle “alive” cue: breathe the rightmost active LED only */
         int8_t tip = rightmost_active_led_from_mask(mask);
         if (tip >= 0) {
@@ -846,7 +849,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case POMO_TOGGLE: {
             if (pstate == PSTATE_OFF) {
                 /* Start WORK immediately from stored work_setting (allow 1 minute) */
-                start_period(PSTATE_WORK, clamp_1_to_55(work_setting_min));
+                start_period(PSTATE_WORK, clamp_1_to_75(work_setting_min));
             } else {
                 stop_period();
             }
@@ -859,9 +862,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 /* Live adjust (no blink). Jump to adjacent 5-min boundary. */
                 period_ms_left = (keycode == POMO_WORK_DEC) ? step_down_ms(period_ms_left)
                                                             : step_up_ms(period_ms_left);
-                /* Clamp within 5..55 and also update "setting" memory. */
+                /* Clamp within 5..75 and also update "setting" memory. */
                 uint8_t new_min = (uint8_t)((period_ms_left + 59999) / 60000);
-                work_setting_min = clamp_5_to_55(((new_min + 2) / 5) * 5);
+                work_setting_min = clamp_1_to_75(((new_min + 2) / 5) * 5);
                 return false;
             }
             if (pstate == PSTATE_BREAK) {
@@ -873,9 +876,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (work_config_layer_on()) {
                 /* IMMEDIATE commit while the Work config layer is held (no preview/double-blink) */
                 if (keycode == POMO_WORK_DEC) {
-                    work_setting_min = clamp_1_to_55(minus5_or_to1(work_setting_min));  /* includes 5→1 */
+                    work_setting_min = clamp_1_to_75(minus5_or_to1(work_setting_min));  /* includes 5→1 */
                 } else {
-                    work_setting_min = clamp_1_to_55(plus5_from1(work_setting_min));    /* 1→5, then +5 */
+                    work_setting_min = clamp_1_to_75(plus5_from1(work_setting_min));    /* 1→5, then +5 */
                 }
                 return false;  /* rendering handled in housekeeping (immediate display) */
             }
@@ -894,9 +897,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     /* Second press inside the window: COMMIT and show updated selection */
                     if (keycode == POMO_WORK_DEC) {
-                        work_setting_min = clamp_1_to_55(minus5_or_to1(work_setting_min));
+                        work_setting_min = clamp_1_to_75(minus5_or_to1(work_setting_min));
                     } else {
-                        work_setting_min = clamp_1_to_55(plus5_from1(work_setting_min));
+                        work_setting_min = clamp_1_to_75(plus5_from1(work_setting_min));
                     }
                     preview_until   = now + POMO_PREVIEW_MS;
                     preview_blinked = true;  /* skip the double-blink; steady mask after commit */
@@ -912,7 +915,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 period_ms_left = (keycode == POMO_BREAK_DEC) ? step_down_ms(period_ms_left)
                                                              : step_up_ms(period_ms_left);
                 uint8_t new_min = (uint8_t)((period_ms_left + 59999) / 60000);
-                break_setting_min = clamp_5_to_55(((new_min + 2) / 5) * 5);
+                break_setting_min = clamp_1_to_75(((new_min + 2) / 5) * 5);
                 return false;
             }
             if (pstate == PSTATE_WORK) {
@@ -924,9 +927,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (break_config_layer_on()) {
                 /* IMMEDIATE commit while the Break config layer is held (no preview/double-blink) */
                 if (keycode == POMO_BREAK_DEC) {
-                    break_setting_min = clamp_1_to_55(minus5_or_to1(break_setting_min));
+                    break_setting_min = clamp_1_to_75(minus5_or_to1(break_setting_min));
                 } else {
-                    break_setting_min = clamp_1_to_55(plus5_from1(break_setting_min));
+                    break_setting_min = clamp_1_to_75(plus5_from1(break_setting_min));
                 }
                 return false;  /* rendering handled in housekeeping (immediate display) */
             }
@@ -945,9 +948,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     /* Second press inside the window: COMMIT and show updated selection */
                     if (keycode == POMO_BREAK_DEC) {
-                        break_setting_min = clamp_1_to_55(minus5_or_to1(break_setting_min));
+                        break_setting_min = clamp_1_to_75(minus5_or_to1(break_setting_min));
                     } else {
-                        break_setting_min = clamp_1_to_55(plus5_from1(break_setting_min));
+                        break_setting_min = clamp_1_to_75(plus5_from1(break_setting_min));
                     }
                     preview_until   = now + POMO_PREVIEW_MS;
                     preview_blinked = true;  /* skip the double-blink; steady mask after commit */
@@ -968,10 +971,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             hsv.v = rgblight_get_val();
 
             if (cp_boot_anim_enabled) {
-                set_led_6_mask(0b111111, hsv);
+                set_led_mask(LED_ALL_MASK, hsv);
             } else {
                 hsv.v = 0;
-                set_led_6_mask(0b111111, hsv);
+                set_led_mask(LED_ALL_MASK, hsv);
             }
             return false;
 
@@ -1059,7 +1062,7 @@ static void caps_effect_set(bool on) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t layer = get_highest_layer(state);
-    static uint8_t last_layer = 0xFF;
+    static uint8_t last_layer = LED_ALL_MASK;
 
     /* Don’t apply a static color when entering CP edit layers (8/9/10);
        let CP paint the layer-ID mask immediately instead. */

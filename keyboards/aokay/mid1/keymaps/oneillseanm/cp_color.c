@@ -31,7 +31,7 @@
 
 /* -- How many palette slots/layers does CP expose? ------------------------ */
 #ifndef CP_NUM_LAYERS
-#    define CP_NUM_LAYERS 12
+#    define CP_NUM_LAYERS 16
 #endif
 
 /* Caps styling pseudo-slot (treated like an extra "layer" for style editing) */
@@ -55,7 +55,7 @@
 /* -- CP preview LED mapping (slot→LED index) ------------------------------ */
 
 #ifndef CP_PREVIEW_LEDS
-#    define CP_PREVIEW_LEDS 6 /* CP_PREVIEW_LEDS */
+#    define CP_PREVIEW_LEDS 8 /* CP_PREVIEW_LEDS */
 #endif
 
 #ifndef CP_PREVIEW_OFFSET
@@ -131,13 +131,26 @@ static inline void cp_anim_preview_tick(void) {
 
 /* -- Types / storage ------------------------------------------------------ */
 
-/* 12 selection masks (bit 5 = leftmost LED) */
-static const uint8_t CP_PATS[12] = {
-    0b100001, /* 0: IOOOOI */ 0b100000, /* 1: IOOOOO */ 0b110000, /* 2: IIOOOO */
-    0b111000, /* 3: IIIOOO */ 0b111100, /* 4: IIIIOO */ 0b111110, /* 5: IIIIIO */
-    0b111111, /* 6: IIIIII */ 0b011111, /* 7: OIIIII */ 0b001111, /* 8: OOIIII */
-    0b000111, /* 9: OOOIII */ 0b000011, /* 10: OOOOII */ 0b000001 /* 11: OOOOOI */
+static const uint8_t CP_PATS[16] = {
+    0b10000001, /*  0: layer 0  IOOOOOOI  (special) */
+    0b10000000, /*  1: layer 1  IOOOOOOO */
+    0b11000000, /*  2: layer 2  IIOOOOOO */
+    0b11100000, /*  3: layer 3  IIIOOOOO */
+    0b11110000, /*  4: layer 4  IIIIOOOO */
+    0b11111000, /*  5: layer 5  IIIIIOOO */
+    0b11111100, /*  6: layer 6  IIIIIIOO */
+    0b11111110, /*  7: layer 7  IIIIIIIO */
+    0b11111111, /*  8: layer 8  IIIIIIII */
+    0b01111111, /*  9: layer 9  OIIIIIII */
+    0b00111111, /* 10: layer 10 OOIIIIII */
+    0b00011111, /* 11: layer 11 OOOIIIII */
+    0b00001111, /* 12: layer 12 OOOOIIII */
+    0b00000111, /* 13: layer 13 OOOOOIII */
+    0b00000011, /* 14: layer 14 OOOOOOII */
+    0b00000001  /* 15: layer 15 OOOOOOOI */
 };
+
+
 
 // Return the LED mask for the current CP selection.
 //  - 0..(CP_NUM_LAYERS-1) = real layers (use CP_PATS)
@@ -147,8 +160,9 @@ static inline uint8_t cp_mask_for_sel(uint8_t sel) {
         return CP_PATS[sel];
     }
 
-    // Caps pattern: OOIOOI (LEDs 2+3 on, 0..5 = left→right)
-    return 0b001100;
+    // Caps pattern (middle two LEDs): 0b00011000
+
+    return 0b00011000;
 }
 
 static HSV16   work; /* scratch during edits */
@@ -334,7 +348,7 @@ void cp_color_preview_draw(uint8_t layer, HSV16 hsv) {
 
 static void seed_defaults(void) {
     const uint8_t v = rgblight_get_val();
-    const HSV16 table[12] = {
+    const HSV16 table[16] = {
         { H_OF_TUPLE(HSV_MID1ORANGE),  S_OF_TUPLE(HSV_MID1ORANGE),  v },
         { H_OF_TUPLE(HSV_MID1BLUE),    S_OF_TUPLE(HSV_MID1BLUE),    v },
         { H_OF_TUPLE(HSV_MID1GREEN),   S_OF_TUPLE(HSV_MID1GREEN),   v },
@@ -348,7 +362,7 @@ static void seed_defaults(void) {
         { H_OF_TUPLE(HSV_CP_DEFAULT),  S_OF_TUPLE(HSV_CP_DEFAULT),  v },
         { H_OF_TUPLE(HSV_CP_DEFAULT),  S_OF_TUPLE(HSV_CP_DEFAULT),  v },
     };
-    for (uint8_t i = 0; i < 12; i++) store[i] = table[i];
+    for (uint8_t i = 0; i < 16; i++) store[i] = table[i];
     for (uint8_t i = 0; i < CP_NUM_LAYERS; i++) anim_store[i] = RGBLIGHT_MODE_STATIC_LIGHT;
     store[CP_CAPS_SLOT].h = store[0].h;
     store[CP_CAPS_SLOT].s = store[0].s;
