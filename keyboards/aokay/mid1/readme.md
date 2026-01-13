@@ -1,14 +1,14 @@
-# KB-40-A
+# MID.1
 
-![KB-40-A illustration](https://i.imgur.com/x8FNkei.png)
+![MID.1 photo](https://i.imgur.com/aPsvygY.jpeg)
 
 ## Description
 
-A compact, staggered, 40% (4x12) keyboard.
+A 40% keyboard with a staggered 4x12 layout and hotswap PCB.
 
 * Keyboard Maintainer: [Sean O'Neill](https://github.com/oneillseanm)
-* Hardware Supported: TODO
-* Hardware Availability: TODO
+* Hardware Supported: MID.1
+* Hardware Availability: [A.Okay! product page](https://www.aokay.cool)
 
 ## Setup
 
@@ -24,7 +24,8 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 
 ## Bootloader
 
-Enter the bootloader in two ways:
+Enter the bootloader in three ways:
 
-* **Keycode in layout**: Using the default firmware, press `FN+Backspace` which is assigned to `QK_BOOT`.
-* **Physical reset button**: Briefly press the button on the front of the PCB
+* **Bootmagic reset**: Hold down `Esc` and plug in the keyboard. `Esc` is assigned to the top left key in the default keymap.
+* **Keycode in layout**: Press `Fn+ESC` for `QK_BOOT`. `Fn` is assigned to the key to the right of the spacebar/split spacebar in the default keymap.
+* **Physical reset button**: Briefly press the button on the back of the PCB, accessible through the bottom case.
