@@ -1,7 +1,7 @@
-# A-Okay!
+# A.Okay!
 
-A-Okay! makes mechanical keyboards.
+This directory contains keyboards designed by **A.Okay!**, a small independent studio focused on thoughtfuly-designed physical products.
 
-**Website:** https://www.seanswebsite.com/
+Based in Seattle, Washington.
 
-TODO: add actual website and  contact info
+**Website:** https://www.aokay.cool/
