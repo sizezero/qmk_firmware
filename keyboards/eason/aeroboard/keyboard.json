@@ -9,7 +9,7 @@
         "force_nkro": true
     },
     "rgblight": {
-        "led_count": 20,
+        "led_count": 6,
         "animations": {
             "breathing": true,
             "rainbow_mood": true,
