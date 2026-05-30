@@ -83,7 +83,7 @@ date. My source tree is `~/qmk_firmware_kleemann/`
     mkdir python-qmk
     python3 -m venv python-qmk
     python-qmk/bin/python3 -m pip install qmk
-    ( cd bin ; ln -s ../pyhon-qmk/bin/qmk qmk )
+    ( cd bin ; ln -s ../keyboard/python-qmk/bin/qmk qmk )
 
 In order to flash with qmk the normal unix user needs permissions to
 access the USB device. See [these
